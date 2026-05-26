@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebGIS Geumjeong-gu | Pendidikan & Transportasi</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <!-- Leaflet JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #185FA5;
+      --blue-dark:  #0C447C;
+      --blue-light: #E6F1FB;
+      --green:      #27823A;
+      --red:        #C0392B;
+      --orange:     #E07B20;
+      --gray:       #6B7280;
+      --bg:         #F8F9FC;
+      --white:      #FFFFFF;
+      --shadow:     0 2px 16px rgba(0,0,0,.10);
+      --shadow-lg:  0 4px 32px rgba(0,0,0,.14);
+      --radius:     12px;
+      --radius-sm:  8px;
+      --font:       'DM Sans', 'Noto Sans KR', sans-serif;
+    }
+
+    html, body { height: 100%; font-family: var(--font); background: var(--bg); }
+
+    /* ===== MAP ===== */
+    #map { position: absolute; inset: 0; z-index: 0; }
+
+    /* ===== LOADING ===== */
+    #loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--blue-dark);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 20px;
+      transition: opacity .5s ease;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 4px solid rgba(255,255,255,.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: #fff; font-size: 15px; font-weight: 500; opacity: .85; }
+    .loading-sub  { color: rgba(255,255,255,.55); font-size: 12px; }
+
+    /* ===== HEADER BAR ===== */
+    #header {
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      z-index: 1000;
+      background: var(--white);
+      border-radius: 999px;
+      padding: 10px 22px;
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: 12px;
+      white-space: nowrap;
+    }
+    .header-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+    .header-title { font-size: 14px; font-weight: 700; color: var(--blue-dark); letter-spacing: -.2px; }
+    .header-sub { font-size: 12px; color: var(--gray); }
+
+    /* ===== STATS PANEL ===== */
+    #stats {
+      position: absolute; top: 70px; left: 12px; z-index: 1000;
+      background: var(--white); border-radius: var(--radius);
+      padding: 14px 16px; box-shadow: var(--shadow);
+      min-width: 200px;
+    }
+    .stats-title { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .stat-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-bottom: 1px solid #F1F3F7; }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
+    .stat-label { font-size: 12px; color: var(--gray); flex: 1; }
+    .stat-val { font-size: 14px; font-weight: 700; color: var(--blue-dark); }
+
+    /* ===== SEARCH ===== */
+    #search-wrap {
+      position: absolute; top: 70px; right: 12px; z-index: 1000;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    #search-box {
+      background: var(--white); border-radius: var(--radius-sm);
+      padding: 10px 14px; box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 8px;
+    }
+    #search-box input {
+      border: none; outline: none; font-family: var(--font);
+      font-size: 13px; width: 200px; color: #1F2937;
+      background: transparent;
+    }
+    #search-box input::placeholder { color: #9CA3AF; }
+    .search-icon { font-size: 16px; color: var(--gray); }
+    #search-results {
+      background: var(--white); border-radius: var(--radius-sm);
+      box-shadow: var(--shadow); overflow: hidden;
+      display: none; max-height: 200px; overflow-y: auto;
+    }
+    .search-item {
+      padding: 9px 14px; font-size: 13px; cursor: pointer;
+      border-bottom: 1px solid #F1F3F7; display: flex; align-items: center; gap: 8px;
+      transition: background .15s;
+    }
+    .search-item:hover { background: var(--blue-light); }
+    .search-item:last-child { border-bottom: none; }
+
+    /* ===== LAYER CONTROL ===== */
+    #layer-control {
+      position: absolute; top: 130px; right: 12px; z-index: 1000;
+      background: var(--white); border-radius: var(--radius);
+      padding: 14px 16px; box-shadow: var(--shadow); min-width: 210px;
+    }
+    .lc-title { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .lc-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; }
+    .lc-row:hover { opacity: .8; }
+    .lc-sym { width: 18px; height: 18px; border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+    .lc-label { font-size: 13px; color: #374151; flex: 1; }
+    .lc-toggle {
+      width: 32px; height: 18px; border-radius: 999px; background: #E5E7EB;
+      position: relative; transition: background .2s; flex-shrink: 0; cursor: pointer;
+    }
+    .lc-toggle.on { background: var(--blue); }
+    .lc-toggle::after {
+      content: ''; position: absolute; top: 2px; left: 2px;
+      width: 14px; height: 14px; border-radius: 50%; background: #fff;
+      transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+    }
+    .lc-toggle.on::after { transform: translateX(14px); }
+
+    /* ===== BASEMAP SWITCHER ===== */
+    #basemap-switcher {
+      position: absolute; bottom: 80px; right: 12px; z-index: 1000;
+      background: var(--white); border-radius: var(--radius);
+      padding: 12px 14px; box-shadow: var(--shadow);
+    }
+    .bm-title { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+    .bm-options { display: flex; gap: 6px; }
+    .bm-btn {
+      padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 500;
+      border: 1.5px solid #E5E7EB; background: var(--white); cursor: pointer;
+      color: var(--gray); font-family: var(--font); transition: all .15s;
+    }
+    .bm-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* ===== LEGEND ===== */
+    #legend {
+      position: absolute; bottom: 80px; left: 12px; z-index: 1000;
+      background: var(--white); border-radius: var(--radius);
+      padding: 14px 16px; box-shadow: var(--shadow); min-width: 190px;
+    }
+    .leg-title { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+    .leg-section { margin-bottom: 10px; }
+    .leg-section-label { font-size: 10px; font-weight: 600; color: #9CA3AF; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 5px; }
+    .leg-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+    .leg-sym { width: 16px; height: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .leg-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.2); }
+    .leg-sq  { width: 12px; height: 12px; border: 1.5px solid rgba(0,0,0,.2); }
+    .leg-tri {
+      width: 0; height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 12px solid var(--blue);
+    }
+    .leg-line { width: 16px; height: 3px; border-radius: 2px; }
+    .leg-label { font-size: 12px; color: #374151; }
+
+    /* ===== ZOOM BTN ===== */
+    #zoom-geumjeong {
+      position: absolute; bottom: 130px; left: 12px; z-index: 1000;
+      background: var(--blue); color: #fff; border: none;
+      border-radius: var(--radius-sm); padding: 9px 14px;
+      font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font);
+      box-shadow: var(--shadow); display: flex; align-items: center; gap: 6px;
+      transition: background .15s;
+    }
+    #zoom-geumjeong:hover { background: var(--blue-dark); }
+
+    /* ===== COORDS ===== */
+    #coords {
+      position: absolute; bottom: 8px; right: 12px; z-index: 1000;
+      background: rgba(255,255,255,.9); border-radius: 6px;
+      padding: 4px 10px; font-size: 11px; color: var(--gray);
+      box-shadow: var(--shadow); font-family: var(--font-mono, monospace);
+    }
+
+    /* ===== POPUP CUSTOM ===== */
+    .leaflet-popup-content-wrapper {
+      border-radius: var(--radius-sm) !important;
+      box-shadow: var(--shadow-lg) !important;
+      padding: 0 !important; overflow: hidden;
+      font-family: var(--font) !important;
+    }
+    .leaflet-popup-content { margin: 0 !important; min-width: 200px; }
+    .popup-header {
+      padding: 12px 16px 10px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .popup-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+    .popup-title { font-size: 14px; font-weight: 700; color: #1F2937; line-height: 1.3; }
+    .popup-type  { font-size: 11px; color: var(--gray); margin-top: 2px; }
+    .popup-body  { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 5px; }
+    .popup-row   { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #374151; }
+    .popup-row span:first-child { color: var(--gray); min-width: 60px; }
+    .popup-tag {
+      display: inline-block; padding: 2px 8px; border-radius: 999px;
+      font-size: 11px; font-weight: 600; margin-top: 4px;
+    }
+    .leaflet-popup-tip-container { margin-top: -1px !important; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      #header { top: 8px; padding: 8px 16px; }
+      .header-sub { display: none; }
+      #stats { display: none; }
+      #search-box input { width: 140px; }
+      #layer-control { min-width: 170px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Memuat WebGIS Geumjeong-gu</div>
+  <div class="loading-sub">Menyiapkan data pendidikan & transportasi...</div>
+</div>
+
+<!-- MAP -->
+<div id="map"></div>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="header-dot"></div>
+  <div>
+    <div class="header-title">WebGIS Geumjeong-gu, Busan</div>
+  </div>
+  <div class="header-sub">Persebaran Pendidikan & Akses Transportasi</div>
+</div>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-title">Ringkasan Data</div>
+  <div class="stat-row">
+    <div class="stat-icon">🏫</div>
+    <div class="stat-label">Total Sekolah</div>
+    <div class="stat-val" id="cnt-school">—</div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-icon">🚂</div>
+    <div class="stat-label">Stasiun KA</div>
+    <div class="stat-val" id="cnt-train">—</div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-icon">🚌</div>
+    <div class="stat-label">Halte Bus</div>
+    <div class="stat-val" id="cnt-bus">—</div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div id="search-wrap">
+  <div id="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Cari sekolah / stasiun..."/>
+  </div>
+  <div id="search-results"></div>
+</div>
+
+<!-- LAYER CONTROL -->
+<div id="layer-control">
+  <div class="lc-title">Layer</div>
+  <div class="lc-row" onclick="toggleLayer('education')">
+    <div class="lc-sym">🏫</div>
+    <div class="lc-label">Sekolah</div>
+    <div class="lc-toggle on" id="tog-education"></div>
+  </div>
+  <div class="lc-row" onclick="toggleLayer('train')">
+    <div class="lc-sym">🚂</div>
+    <div class="lc-label">Stasiun KA</div>
+    <div class="lc-toggle on" id="tog-train"></div>
+  </div>
+  <div class="lc-row" onclick="toggleLayer('bus')">
+    <div class="lc-sym">🚌</div>
+    <div class="lc-label">Halte Bus</div>
+    <div class="lc-toggle on" id="tog-bus"></div>
+  </div>
+  <div class="lc-row" onclick="toggleLayer('railway')">
+    <div class="lc-sym" style="font-size:10px;">━━</div>
+    <div class="lc-label">Jalur Rel</div>
+    <div class="lc-toggle on" id="tog-railway"></div>
+  </div>
+  <div class="lc-row" onclick="toggleLayer('buffer')">
+    <div class="lc-sym" style="font-size:10px; color:#185FA5;">⊙</div>
+    <div class="lc-label">Buffer Stasiun</div>
+    <div class="lc-toggle on" id="tog-buffer"></div>
+  </div>
+  <div class="lc-row" onclick="toggleLayer('boundary')">
+    <div class="lc-sym" style="font-size:10px;">▭</div>
+    <div class="lc-label">Batas Wilayah</div>
+    <div class="lc-toggle on" id="tog-boundary"></div>
+  </div>
+</div>
+
+<!-- BASEMAP -->
+<div id="basemap-switcher">
+  <div class="bm-title">Basemap</div>
+  <div class="bm-options">
+    <button class="bm-btn active" onclick="switchBasemap('light',this)">Light</button>
+    <button class="bm-btn" onclick="switchBasemap('osm',this)">OSM</button>
+    <button class="bm-btn" onclick="switchBasemap('dark',this)">Dark</button>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div id="legend">
+  <div class="leg-title">Legenda</div>
+
+  <div class="leg-section">
+    <div class="leg-section-label">Pendidikan</div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-dot" style="background:#27823A;"></div></div><div class="leg-label">SD (Tingkat 1)</div></div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-tri" style="border-bottom-color:#185FA5;"></div></div><div class="leg-label">SMP (Tingkat 2)</div></div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-sq" style="background:#C0392B;"></div></div><div class="leg-label">SMA/SMK (Tingkat 3)</div></div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-dot" style="background:#6B7280;"></div></div><div class="leg-label">Lainnya</div></div>
+  </div>
+
+  <div class="leg-section">
+    <div class="leg-section-label">Transportasi</div>
+    <div class="leg-row"><div class="leg-sym">🚂</div><div class="leg-label">Stasiun KA</div></div>
+    <div class="leg-row"><div class="leg-sym">🚌</div><div class="leg-label">Halte Bus</div></div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-line" style="background:#185FA5;"></div></div><div class="leg-label">Jalur Rel</div></div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-dot" style="background:rgba(24,95,165,.25);border:1.5px solid #185FA5;"></div></div><div class="leg-label">Buffer 500m</div></div>
+  </div>
+
+  <div class="leg-section" style="margin-bottom:0;">
+    <div class="leg-section-label">Wilayah</div>
+    <div class="leg-row"><div class="leg-sym"><div class="leg-sq" style="background:rgba(39,130,58,.12);border-color:#27823A;"></div></div><div class="leg-label">Batas Geumjeong-gu</div></div>
+  </div>
+</div>
+
+<!-- ZOOM BTN -->
+<button id="zoom-geumjeong" onclick="zoomToGeumjeong()">
+  🎯 Zoom ke Geumjeong
+</button>
+
+<!-- COORDS -->
+<div id="coords">35.2370°N, 129.0850°E</div>
+
+<script>
+// ===== INIT MAP =====
+const map = L.map('map', {
+  center: [35.2370, 129.0850],
+  zoom: 13,
+  zoomControl: false
+});
+
+L.control.zoom({ position: 'bottomleft' }).addTo(map);
+L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
+
+// ===== BASEMAPS =====
+const basemaps = {
+  light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+    attribution: '© CartoDB © OpenStreetMap', maxZoom: 19
+  }),
+  osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap', maxZoom: 19
+  }),
+  dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
+    attribution: '© CartoDB © OpenStreetMap', maxZoom: 19
+  })
+};
+basemaps.light.addTo(map);
+let currentBasemap = basemaps.light;
+
+function switchBasemap(key, btn) {
+  map.removeLayer(currentBasemap);
+  currentBasemap = basemaps[key];
+  map.addLayer(currentBasemap);
+  document.querySelectorAll('.bm-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ===== COORDINATES =====
+map.on('mousemove', e => {
+  document.getElementById('coords').textContent =
+    `${e.latlng.lat.toFixed(4)}°N, ${e.latlng.lng.toFixed(4)}°E`;
+});
+
+// ===== LAYER STORAGE =====
+const layers = {};
+const layerVisible = { education: true, train: true, bus: true, railway: true, buffer: true, boundary: true };
+const searchData = [];
+
+// ===== GEUMJEONG BOUNDS =====
+const geumjeongBounds = [[35.18, 129.02], [35.30, 129.15]];
+function zoomToGeumjeong() {
+  map.fitBounds(geumjeongBounds);
+}
+
+// ===== MARKER ICONS =====
+function makeCircleIcon(color, size=14) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size+6}' height='${size+6}'>
+    <circle cx='${(size+6)/2}' cy='${(size+6)/2}' r='${size/2}' fill='${color}' stroke='white' stroke-width='2'/>
+  </svg>`;
+  return L.divIcon({
+    html: svg, className: '', iconSize: [size+6, size+6],
+    iconAnchor: [(size+6)/2, (size+6)/2], popupAnchor: [0, -(size+6)/2]
+  });
+}
+
+function makeTriangleIcon(color, size=16) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'>
+    <polygon points='${size/2},2 ${size-2},${size-2} 2,${size-2}' fill='${color}' stroke='white' stroke-width='1.5'/>
+  </svg>`;
+  return L.divIcon({
+    html: svg, className: '', iconSize: [size, size],
+    iconAnchor: [size/2, size-2], popupAnchor: [0, -size+2]
+  });
+}
+
+function makeSquareIcon(color, size=14) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'>
+    <rect x='1' y='1' width='${size-2}' height='${size-2}' fill='${color}' stroke='white' stroke-width='1.5' rx='2'/>
+  </svg>`;
+  return L.divIcon({
+    html: svg, className: '', iconSize: [size, size],
+    iconAnchor: [size/2, size/2], popupAnchor: [0, -size/2]
+  });
+}
+
+function makeEmojiIcon(emoji, size=32) {
+  return L.divIcon({
+    html: `<div style="font-size:${size}px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));">${emoji}</div>`,
+    className: '', iconSize: [size, size],
+    iconAnchor: [size/2, size], popupAnchor: [0, -size]
+  });
+}
+
+// ===== POPUP BUILDERS =====
+function schoolPopup(f) {
+  const p = f.properties || {};
+  const lv = p.isced_leve;
+  const lvMap = { 1: ['SD', '#27823A', '📚'], 2: ['SMP', '#185FA5', '📖'], 3: ['SMA/SMK', '#C0392B', '🎓'] };
+  const [label, color, emoji] = lvMap[lv] || ['Sekolah', '#6B7280', '🏫'];
+  const name = p.name || p.name_en || '(Nama tidak tersedia)';
+  return `<div>
+    <div class="popup-header" style="background:${color}15;border-bottom:2px solid ${color};">
+      <div class="popup-icon">${emoji}</div>
+      <div>
+        <div class="popup-title">${name}</div>
+        <div class="popup-type">Fasilitas Pendidikan</div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <div class="popup-row"><span>Tingkat</span><span class="popup-tag" style="background:${color}20;color:${color};">${label}</span></div>
+      ${p.amenity ? `<div class="popup-row"><span>Tipe</span><span>${p.amenity}</span></div>` : ''}
+      ${p.capacity ? `<div class="popup-row"><span>Kapasitas</span><span>${p.capacity} siswa</span></div>` : ''}
+      ${p.isced_leve ? `<div class="popup-row"><span>ISCED Level</span><span>${p.isced_leve}</span></div>` : ''}
+    </div>
+  </div>`;
+}
+
+function trainPopup(f) {
+  const p = f.properties || {};
+  const name = p.name || p.name_en || 'Stasiun Kereta Api';
+  return `<div>
+    <div class="popup-header" style="background:#185FA515;border-bottom:2px solid #185FA5;">
+      <div class="popup-icon">🚂</div>
+      <div>
+        <div class="popup-title">${name}</div>
+        <div class="popup-type">Stasiun Kereta Api</div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <div class="popup-row"><span>Tipe</span><span class="popup-tag" style="background:#E6F1FB;color:#185FA5;">Transportasi Rel</span></div>
+      ${p.railway ? `<div class="popup-row"><span>Jalur</span><span>${p.railway}</span></div>` : ''}
+      ${p.operator ? `<div class="popup-row"><span>Operator</span><span>${p.operator}</span></div>` : ''}
+      <div class="popup-row"><span>Wilayah</span><span>Geumjeong-gu, Busan</span></div>
+    </div>
+  </div>`;
+}
+
+function busPopup(f) {
+  const p = f.properties || {};
+  const name = p.name || p.name_en || 'Halte Bus';
+  return `<div>
+    <div class="popup-header" style="background:#E07B2015;border-bottom:2px solid #E07B20;">
+      <div class="popup-icon">🚌</div>
+      <div>
+        <div class="popup-title">${name}</div>
+        <div class="popup-type">Halte Bus Umum</div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <div class="popup-row"><span>Tipe</span><span class="popup-tag" style="background:#FEF3E2;color:#E07B20;">Transportasi Bus</span></div>
+      ${p.bus ? `<div class="popup-row"><span>Rute</span><span>${p.bus}</span></div>` : ''}
+      ${p.shelter ? `<div class="popup-row"><span>Shelter</span><span>${p.shelter}</span></div>` : ''}
+      <div class="popup-row"><span>Wilayah</span><span>Geumjeong-gu, Busan</span></div>
+    </div>
+  </div>`;
+}
+
+function boundaryPopup(f) {
+  const p = f.properties || {};
+  const name = p.name || p.name_en || 'Geumjeong-gu';
+  return `<div>
+    <div class="popup-header" style="background:#27823A15;border-bottom:2px solid #27823A;">
+      <div class="popup-icon">🗺️</div>
+      <div>
+        <div class="popup-title">${name}</div>
+        <div class="popup-type">Batas Administratif</div>
+      </div>
+    </div>
+    <div class="popup-body">
+      ${p.admin_level ? `<div class="popup-row"><span>Level Admin</span><span>${p.admin_level}</span></div>` : ''}
+      <div class="popup-row"><span>Kota</span><span>Busan, Korea Selatan</span></div>
+    </div>
+  </div>`;
+}
+
+// ===== SCHOOL ICON BY LEVEL =====
+function getSchoolIcon(lv) {
+  if (lv == 1) return makeCircleIcon('#27823A', 14);
+  if (lv == 2) return makeTriangleIcon('#185FA5', 16);
+  if (lv == 3) return makeSquareIcon('#C0392B', 14);
+  return makeCircleIcon('#6B7280', 12);
+}
+
+// ===== LOAD GEOJSON =====
+// NOTE: Ganti URL di bawah dengan path GeoJSON kamu
+// Contoh jika pakai GitHub Pages: './data/education_geumjeong.geojson'
+// Berikut menggunakan data sample baked-in agar bisa jalan tanpa server
+
+const SAMPLE = {
+  education: {
+    "type":"FeatureCollection","features":[
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0831,35.1980]},"properties":{"name":"금사초등학교","isced_leve":1,"amenity":"school"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0842,35.2010]},"properties":{"name":"금사중학교","isced_leve":2,"amenity":"school"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0856,35.2025]},"properties":{"name":"예원여자고등학교","isced_leve":3,"amenity":"school"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0865,35.2030]},"properties":{"name":"금정전자공업고등학교","isced_leve":3,"amenity":"school"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0840,35.2018]},"properties":{"name":"예원여자중학교","isced_leve":2,"amenity":"school"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0820,35.1995]},"properties":{"name":"금사나너울지역아동센터","isced_leve":null,"amenity":"school"}}
+    ]
+  },
+  train: {
+    "type":"FeatureCollection","features":[
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0892,35.2310]},"properties":{"name":"서동역 (Seodong)","railway":"station"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0875,35.2180]},"properties":{"name":"금사역 (Geumsa)","railway":"station"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0860,35.2060]},"properties":{"name":"부산대앞역","railway":"station"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0845,35.1950]},"properties":{"name":"장전역 (Jangjeon)","railway":"station"}}
+    ]
+  },
+  bus: {
+    "type":"FeatureCollection","features":[
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0800,35.2100]},"properties":{"name":"금정구청 버스 정류장","amenity":"bus_stop"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0820,35.2050]},"properties":{"name":"금사동 정류장","amenity":"bus_stop"}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0870,35.2200]},"properties":{"name":"선두구동 정류장","amenity":"bus_stop"}}
+    ]
+  },
+  railway: {
+    "type":"FeatureCollection","features":[
+      {"type":"Feature","geometry":{"type":"LineString","coordinates":[[129.0892,35.2310],[129.0875,35.2180],[129.0860,35.2060],[129.0845,35.1950],[129.0830,35.1820]]},"properties":{"name":"부산 도시철도 1호선","railway":"subway"}}
+    ]
+  },
+  buffer: {
+    "type":"FeatureCollection","features":[
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0875,35.2180]},"properties":{"name":"Buffer Geumsa Station","radius":500}},
+      {"type":"Feature","geometry":{"type":"Point","coordinates":[129.0860,35.2060]},"properties":{"name":"Buffer Busan Univ.","radius":500}}
+    ]
+  },
+  boundary: {
+    "type":"FeatureCollection","features":[
+      {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[129.020,35.185],[129.155,35.185],[129.155,35.305],[129.020,35.305],[129.020,35.185]]]},"properties":{"name":"금정구 (Geumjeong-gu)","admin_level":"3"}}
+    ]
+  }
+};
+
+// ===== RENDER LAYERS =====
+function renderEducation(geojson) {
+  const layer = L.geoJSON(geojson, {
+    pointToLayer: (f, latlng) => {
+      const lv = f.properties.isced_leve;
+      const marker = L.marker(latlng, { icon: getSchoolIcon(lv) });
+      const name = f.properties.name || 'Sekolah';
+      searchData.push({ name, latlng, icon: lv==1?'📚':lv==2?'📖':'🎓', layer: 'Pendidikan' });
+      return marker;
+    },
+    onEachFeature: (f, layer) => {
+      layer.bindPopup(schoolPopup(f), { maxWidth: 280 });
+    }
+  });
+  layers.education = layer;
+  layer.addTo(map);
+  document.getElementById('cnt-school').textContent = geojson.features.length;
+}
+
+function renderTrain(geojson) {
+  const layer = L.geoJSON(geojson, {
+    pointToLayer: (f, latlng) => {
+      const marker = L.marker(latlng, { icon: makeEmojiIcon('🚂', 28) });
+      const name = f.properties.name || 'Stasiun KA';
+      searchData.push({ name, latlng, icon: '🚂', layer: 'Stasiun KA' });
+      return marker;
+    },
+    onEachFeature: (f, layer) => {
+      layer.bindPopup(trainPopup(f), { maxWidth: 260 });
+    }
+  });
+  layers.train = layer;
+  layer.addTo(map);
+  document.getElementById('cnt-train').textContent = geojson.features.length;
+}
+
+function renderBus(geojson) {
+  const layer = L.geoJSON(geojson, {
+    pointToLayer: (f, latlng) => {
+      const marker = L.marker(latlng, { icon: makeEmojiIcon('🚌', 26) });
+      const name = f.properties.name || 'Halte Bus';
+      searchData.push({ name, latlng, icon: '🚌', layer: 'Halte Bus' });
+      return marker;
+    },
+    onEachFeature: (f, layer) => {
+      layer.bindPopup(busPopup(f), { maxWidth: 260 });
+    }
+  });
+  layers.bus = layer;
+  layer.addTo(map);
+  document.getElementById('cnt-bus').textContent = geojson.features.length;
+}
+
+function renderRailway(geojson) {
+  const layer = L.geoJSON(geojson, {
+    style: { color: '#185FA5', weight: 3, opacity: .85, dashArray: null }
+  });
+  layers.railway = layer;
+  layer.addTo(map);
+}
+
+function renderBuffer(geojson) {
+  // Buffer disimulasikan sebagai circle karena data sample point
+  const group = L.layerGroup();
+  geojson.features.forEach(f => {
+    const coords = f.geometry.coordinates;
+    const latlng = [coords[1], coords[0]];
+    const radius = f.properties.radius || 500;
+    L.circle(latlng, {
+      radius, color: '#185FA5', weight: 1.5,
+      fillColor: '#185FA5', fillOpacity: .12, dashArray: '6,4'
+    }).addTo(group);
+  });
+  layers.buffer = group;
+  group.addTo(map);
+}
+
+function renderBoundary(geojson) {
+  const layer = L.geoJSON(geojson, {
+    style: { color: '#27823A', weight: 2.5, fillColor: '#27823A', fillOpacity: .06 },
+    onEachFeature: (f, layer) => {
+      layer.bindPopup(boundaryPopup(f), { maxWidth: 240 });
+    }
+  });
+  layers.boundary = layer;
+  layer.addTo(map);
+}
+
+// ===== TOGGLE LAYER =====
+function toggleLayer(key) {
+  const tog = document.getElementById(`tog-${key}`);
+  if (layerVisible[key]) {
+    map.removeLayer(layers[key]);
+    tog.classList.remove('on');
+  } else {
+    map.addLayer(layers[key]);
+    tog.classList.add('on');
+  }
+  layerVisible[key] = !layerVisible[key];
+}
+
+// ===== SEARCH =====
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  searchResults.innerHTML = '';
+  if (!q) { searchResults.style.display = 'none'; return; }
+  const matches = searchData.filter(d => d.name.toLowerCase().includes(q)).slice(0, 8);
+  if (!matches.length) { searchResults.style.display = 'none'; return; }
+  matches.forEach(d => {
+    const item = document.createElement('div');
+    item.className = 'search-item';
+    item.innerHTML = `<span>${d.icon}</span><div><div style="font-size:13px;font-weight:500;">${d.name}</div><div style="font-size:11px;color:#9CA3AF;">${d.layer}</div></div>`;
+    item.onclick = () => {
+      map.setView(d.latlng, 16);
+      searchResults.style.display = 'none';
+      searchInput.value = d.name;
+    };
+    searchResults.appendChild(item);
+  });
+  searchResults.style.display = 'block';
+});
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('search-wrap').contains(e.target)) {
+    searchResults.style.display = 'none';
+  }
+});
+
+// ===== LOAD DATA =====
+// Coba fetch file GeoJSON dulu — kalau gagal pakai data sample
+async function tryFetch(url, fallback) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('not found');
+    return await res.json();
+  } catch {
+    console.warn(`⚠️ ${url} tidak ditemukan — menggunakan data sample`);
+    return fallback;
+  }
+}
+
+async function loadAllLayers() {
+  const [edu, train, bus, rail, buf, bound] = await Promise.all([
+    tryFetch('./data/education_geumjeong.geojson',       SAMPLE.education),
+    tryFetch('./data/train_station_geumjeong.geojson',   SAMPLE.train),
+    tryFetch('./data/bus_station_geumjeong.geojson',     SAMPLE.bus),
+    tryFetch('./data/railway_geumjeong.geojson',         SAMPLE.railway),
+    tryFetch('./data/buffer_station.geojson',            SAMPLE.buffer),
+    tryFetch('./data/geumjeong_boundary.geojson',        SAMPLE.boundary),
+  ]);
+
+  renderBoundary(bound);
+  renderBuffer(buf);
+  renderRailway(rail);
+  renderBus(bus);
+  renderTrain(train);
+  renderEducation(edu);
+
+  // Hide loading
+  const loading = document.getElementById('loading');
+  loading.classList.add('hidden');
+  setTimeout(() => loading.style.display = 'none', 600);
+
+  // Zoom ke Geumjeong
+  map.fitBounds(geumjeongBounds);
+}
+
+loadAllLayers();
+</script>
+</body>
+</html>
