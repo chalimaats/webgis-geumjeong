@@ -1,348 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WebGIS Geumjeong-gu | Pendidikan & Transportasi</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
-
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html,body{
-  height:100%;
-  font-family:'DM Sans','Noto Sans KR',sans-serif;
-  overflow:hidden;
-}
-
-#map{
-  width:100%;
-  height:100%;
-}
-
-/* HEADER */
-#header{
-  position:absolute;
-  top:14px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:999;
-  background:white;
-  padding:12px 22px;
-  border-radius:999px;
-  box-shadow:0 4px 18px rgba(0,0,0,.15);
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.header-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#1A6BB5;
-}
-
-.header-title{
-  font-weight:700;
-  color:#0C447C;
-  font-size:14px;
-}
-
-.header-sub{
-  color:#64748B;
-  font-size:12px;
-}
-
-/* PANEL */
-.panel{
-  position:absolute;
-  z-index:999;
-  background:white;
-  border-radius:14px;
-  box-shadow:0 4px 20px rgba(0,0,0,.12);
-  overflow:hidden;
-}
-
-.panel-head{
-  padding:12px 16px;
-  border-bottom:1px solid #EEF2F7;
-  font-size:12px;
-  font-weight:700;
-  color:#64748B;
-  letter-spacing:.05em;
-  text-transform:uppercase;
-}
-
-.panel-body{
-  padding:14px 16px;
-}
-
-/* STATS */
-#stats{
-  top:80px;
-  left:14px;
-  width:220px;
-}
-
-.stat{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px 0;
-  border-bottom:1px solid #F1F5F9;
-}
-
-.stat:last-child{
-  border:none;
-}
-
-.stat-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.stat-dot{
-  width:11px;
-  height:11px;
-  border-radius:50%;
-}
-
-.stat-name{
-  font-size:13px;
-  color:#475569;
-}
-
-.stat-val{
-  font-weight:700;
-  color:#0F172A;
-}
-
-/* LEGEND */
-#legend{
-  bottom:20px;
-  left:14px;
-  width:220px;
-}
-
-.legend-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.legend-sym{
-  width:14px;
-  height:14px;
-  border-radius:50%;
-}
-
-.legend-label{
-  font-size:13px;
-  color:#334155;
-}
-
-/* SEARCH */
-#searchBox{
-  position:absolute;
-  top:80px;
-  right:14px;
-  z-index:999;
-  width:260px;
-  background:white;
-  border-radius:14px;
-  box-shadow:0 4px 20px rgba(0,0,0,.12);
-  overflow:hidden;
-}
-
-#searchInput{
-  width:100%;
-  border:none;
-  outline:none;
-  padding:14px;
-  font-size:13px;
-}
-
-#searchResults{
-  max-height:220px;
-  overflow-y:auto;
-  display:none;
-}
-
-.search-item{
-  padding:12px 14px;
-  cursor:pointer;
-  border-top:1px solid #F1F5F9;
-}
-
-.search-item:hover{
-  background:#EFF6FF;
-}
-
-/* BUTTON */
-#zoomBtn{
-  position:absolute;
-  bottom:20px;
-  right:14px;
-  z-index:999;
-  border:none;
-  background:#1A6BB5;
-  color:white;
-  padding:12px 18px;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:600;
-  box-shadow:0 4px 18px rgba(0,0,0,.15);
-}
-
-/* POPUP */
-.leaflet-popup-content-wrapper{
-  border-radius:16px;
-  overflow:hidden;
-}
-
-.popup-head{
-  padding:14px 16px;
-  color:white;
-}
-
-.popup-title{
-  font-size:15px;
-  font-weight:700;
-}
-
-.popup-body{
-  padding:14px 16px;
-}
-
-.popup-row{
-  margin-bottom:8px;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.popup-tag{
-  display:inline-block;
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:700;
-}
-</style>
-</head>
-
-<body>
-
-<div id="map"></div>
-
-<!-- HEADER -->
-<div id="header">
-  <div class="header-dot"></div>
-  <div class="header-title">WebGIS Geumjeong-gu</div>
-  <div class="header-sub">Pendidikan & Transportasi</div>
-</div>
-
-<!-- STATS -->
-<div class="panel" id="stats">
-  <div class="panel-head">Ringkasan Data</div>
-
-  <div class="panel-body">
-
-    <div class="stat">
-      <div class="stat-left">
-        <div class="stat-dot" style="background:#2E8B57"></div>
-        <div class="stat-name">SD</div>
-      </div>
-      <div class="stat-val" id="sdCount">0</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-left">
-        <div class="stat-dot" style="background:#1A6BB5"></div>
-        <div class="stat-name">SMP</div>
-      </div>
-      <div class="stat-val" id="smpCount">0</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-left">
-        <div class="stat-dot" style="background:#C0392B"></div>
-        <div class="stat-name">SMA/SMK</div>
-      </div>
-      <div class="stat-val" id="smaCount">0</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-left">
-        <div class="stat-dot" style="background:#D4720A"></div>
-        <div class="stat-name">Bus Stop</div>
-      </div>
-      <div class="stat-val" id="busCount">0</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-left">
-        <div class="stat-dot" style="background:#0C447C"></div>
-        <div class="stat-name">Train Station</div>
-      </div>
-      <div class="stat-val" id="trainCount">0</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- LEGEND -->
-<div class="panel" id="legend">
-  <div class="panel-head">Legenda</div>
-
-  <div class="panel-body">
-
-    <div class="legend-row">
-      <div class="legend-sym" style="background:#2E8B57"></div>
-      <div class="legend-label">SD</div>
-    </div>
-
-    <div class="legend-row">
-      <div class="legend-sym" style="background:#1A6BB5"></div>
-      <div class="legend-label">SMP</div>
-    </div>
-
-    <div class="legend-row">
-      <div class="legend-sym" style="background:#C0392B"></div>
-      <div class="legend-label">SMA/SMK</div>
-    </div>
-
-    <div class="legend-row">
-      <div class="legend-sym" style="background:#D4720A"></div>
-      <div class="legend-label">Bus Stop</div>
-    </div>
-
-    <div class="legend-row">
-      <div class="legend-sym" style="background:#0C447C"></div>
-      <div class="legend-label">Train Station</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- SEARCH -->
-<div id="searchBox">
-  <input type="text" id="searchInput" placeholder="Cari sekolah atau stasiun..."/>
-  <div id="searchResults"></div>
-</div>
-
-<!-- BUTTON -->
-<button id="zoomBtn">Zoom Geumjeong</button>
+<!-- =========================
+REPLACE ONLY THIS <script> SECTION
+JANGAN HAPUS HTML & CSS KAMU
+========================= -->
 
 <script>
 
@@ -351,177 +10,797 @@ html,body{
 // =======================
 
 const GEUMJEONG_BOUNDS = L.latLngBounds(
-  [35.195,129.005],
-  [35.310,129.120]
+  [35.205,129.030],
+  [35.295,129.110]
 );
 
 const map = L.map('map',{
   center:[35.237,129.085],
-  zoom:13,
-  minZoom:12,
+  zoom:14,
+  minZoom:13,
   maxZoom:18,
-  maxBounds:GEUMJEONG_BOUNDS,
-  maxBoundsViscosity:1.0
+  zoomControl:false,
+  maxBounds: GEUMJEONG_BOUNDS,
+  maxBoundsViscosity: 1.0
 });
+
+L.control.zoom({
+  position:'bottomleft'
+}).addTo(map);
+
+L.control.scale({
+  metric:true,
+  imperial:false,
+  position:'bottomleft'
+}).addTo(map);
 
 map.fitBounds(GEUMJEONG_BOUNDS);
 
 // =======================
-// BASEMAP
+// COORDINATE
 // =======================
 
-L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  {
-    attribution:'© OpenStreetMap © CartoDB'
-  }
-).addTo(map);
+map.on('mousemove',e=>{
+
+  document.getElementById('coords').textContent=
+    `${e.latlng.lat.toFixed(4)}°N, ${e.latlng.lng.toFixed(4)}°E`;
+
+});
 
 // =======================
-// ICONS
+// BASEMAPS
 // =======================
 
-function makeIcon(color){
+const BM={
+
+  light:L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+    {
+      attribution:'© CartoDB',
+      maxZoom:19
+    }
+  ),
+
+  osm:L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution:'© OSM',
+      maxZoom:19
+    }
+  ),
+
+  dark:L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
+    {
+      attribution:'© CartoDB',
+      maxZoom:19
+    }
+  )
+
+};
+
+BM.light.addTo(map);
+
+let curBM=BM.light;
+
+function switchBM(k,btn){
+
+  map.removeLayer(curBM);
+
+  curBM=BM[k];
+
+  curBM.addTo(map);
+
+  document
+    .querySelectorAll('.bm-btn')
+    .forEach(b=>b.classList.remove('on'));
+
+  btn.classList.add('on');
+
+}
+
+// =======================
+// ICON FACTORY
+// =======================
+
+function pinIcon(color,shape='round'){
+
+  const borderRadius = shape==='sq'
+    ? '4px 4px 4px 0'
+    : '50% 50% 50% 0';
+
+  const html=`
+
+    <div style="
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    ">
+
+      <div style="
+        width:24px;
+        height:24px;
+        border-radius:${borderRadius};
+        transform:rotate(-45deg);
+        background:${color};
+        border:2.5px solid rgba(255,255,255,.95);
+        box-shadow:0 3px 10px rgba(0,0,0,.3);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      ">
+
+        <div style="
+          width:7px;
+          height:7px;
+          border-radius:50%;
+          background:white;
+          transform:rotate(45deg);
+        "></div>
+
+      </div>
+
+    </div>
+  `;
 
   return L.divIcon({
+    html,
     className:'',
-    html:`
-      <div style="
-        width:20px;
-        height:20px;
-        border-radius:50%;
-        background:${color};
-        border:3px solid white;
-        box-shadow:0 2px 10px rgba(0,0,0,.25);
-      "></div>
-    `,
-    iconSize:[20,20]
+    iconSize:[24,24],
+    iconAnchor:[12,24],
+    popupAnchor:[0,-24]
   });
 
 }
 
-const iconSD = makeIcon('#2E8B57');
-const iconSMP = makeIcon('#1A6BB5');
-const iconSMA = makeIcon('#C0392B');
-const iconBus = makeIcon('#D4720A');
-const iconTrain = makeIcon('#0C447C');
+function schoolIcon(lv){
+
+  if(lv==1) return pinIcon('#2E8B57');
+
+  if(lv==2) return pinIcon('#1A6BB5');
+
+  if(lv==3) return pinIcon('#C0392B','sq');
+
+  return pinIcon('#64748B');
+
+}
+
+const trainIcon = pinIcon('#0C447C','sq');
+const busIcon   = pinIcon('#D4720A');
 
 // =======================
-// SAMPLE DATA
+// LAYER STORE
 // =======================
 
-const trainStations = [
-  {
-    name:'Jangjeon Station',
-    coord:[35.2290,129.0870]
-  },
-  {
-    name:'Busan Univ Station',
-    coord:[35.2330,129.0860]
-  }
-];
+const LY={};
 
-const busStops = [
-  {
-    name:'Geumjeong Office',
-    coord:[35.2250,129.0820]
-  },
-  {
-    name:'Bus Stop Central',
-    coord:[35.2370,129.0840]
-  }
-];
+const VIS={
+  edu:true,
+  train:true,
+  bus:true,
+  rail:true,
+  buf:true,
+  bnd:true
+};
 
-const schools = [
-  {
-    name:'Geumsa Elementary School',
-    level:'SD',
-    coord:[35.2280,129.0830]
-  },
-  {
-    name:'Geumjeong Middle School',
-    level:'SMP',
-    coord:[35.2350,129.0850]
-  },
-  {
-    name:'Busan Science High School',
-    level:'SMA',
-    coord:[35.2400,129.0900]
+const SEARCH=[];
+
+// =======================
+// TOGGLE LAYER
+// =======================
+
+function toggleLayer(k){
+
+  const t=document.getElementById('tog-'+k);
+
+  if(VIS[k]){
+
+    map.removeLayer(LY[k]);
+
+    t.classList.remove('on');
+
+  }else{
+
+    map.addLayer(LY[k]);
+
+    t.classList.add('on');
+
   }
+
+  VIS[k]=!VIS[k];
+
+}
+
+// =======================
+// GEUMJEONG POLYGON
+// =======================
+
+const GEUMJEONG_POLY = [
+
+  [35.3002,129.0412],
+  [35.2998,129.0498],
+  [35.2965,129.0521],
+  [35.2944,129.0587],
+  [35.2912,129.0634],
+  [35.2889,129.0698],
+  [35.2845,129.0734],
+  [35.2812,129.0801],
+  [35.2798,129.0867],
+  [35.2756,129.0923],
+  [35.2712,129.0978],
+  [35.2689,129.1034],
+  [35.2645,129.1067],
+  [35.2601,129.1123],
+  [35.2556,129.1145],
+  [35.2512,129.1134],
+  [35.2478,129.1089],
+  [35.2434,129.1056],
+  [35.2401,129.1012],
+  [35.2367,129.0967],
+  [35.2334,129.0934],
+  [35.2289,129.0912],
+  [35.2245,129.0878],
+  [35.2212,129.0823],
+  [35.2178,129.0778],
+  [35.2145,129.0712],
+  [35.2112,129.0667],
+  [35.2089,129.0601],
+  [35.2067,129.0534],
+  [35.2056,129.0467],
+  [35.2067,129.0401],
+  [35.2089,129.0345],
+  [35.2123,129.0289],
+  [35.2156,129.0234],
+  [35.2189,129.0178],
+  [35.2234,129.0134],
+  [35.2278,129.0101],
+  [35.2334,129.0078],
+  [35.2389,129.0067],
+  [35.2445,129.0078],
+  [35.2501,129.0101],
+  [35.2545,129.0134],
+  [35.2589,129.0167],
+  [35.2634,129.0201],
+  [35.2678,129.0245],
+  [35.2712,129.0289],
+  [35.2745,129.0334],
+  [35.2778,129.0378],
+  [35.2812,129.0312],
+  [35.2856,129.0267],
+  [35.2901,129.0234],
+  [35.2945,129.0289],
+  [35.2978,129.0345],
+  [35.3002,129.0412]
+
 ];
 
 // =======================
 // BOUNDARY
 // =======================
 
-const boundaryCoords = [
-  [35.3002,129.0412],
-  [35.2056,129.0467],
-  [35.2067,129.1056],
-  [35.3002,129.0412]
-];
+function renderBoundary(){
 
-const boundary = L.polygon(boundaryCoords,{
-  color:'#2E8B57',
-  weight:3,
-  fillColor:'#2E8B57',
-  fillOpacity:.08
-}).addTo(map);
+  const poly=L.polygon(
+    GEUMJEONG_POLY,
+    {
+      color:'#2E8B57',
+      weight:3,
+      fillColor:'#2E8B57',
+      fillOpacity:.06
+    }
+  );
 
-boundary.on('mouseover',()=>{
-  boundary.setStyle({
-    fillOpacity:.18,
-    weight:5
+  poly.on('mouseover',()=>{
+
+    poly.setStyle({
+      fillOpacity:.18,
+      weight:5
+    });
+
   });
-});
 
-boundary.on('mouseout',()=>{
-  boundary.setStyle({
-    fillOpacity:.08,
-    weight:3
+  poly.on('mouseout',()=>{
+
+    poly.setStyle({
+      fillOpacity:.06,
+      weight:3
+    });
+
   });
-});
+
+  poly.bindPopup(`
+    <div>
+      <div class="pu-head"
+        style="
+          background:#E8F5EE;
+          border-color:#2E8B57;
+        ">
+
+        <div class="pu-badge"
+          style="
+            background:#2E8B5720;
+            color:#2E8B57;
+          ">
+          🗺 Geumjeong-gu
+        </div>
+
+        <div class="pu-name">
+          Geumjeong District
+        </div>
+
+      </div>
+
+      <div class="pu-body">
+
+        <div class="pu-row">
+          <span class="pu-key">Kota</span>
+          <span class="pu-val">
+            Busan, Korea Selatan
+          </span>
+        </div>
+
+      </div>
+    </div>
+  `);
+
+  LY.bnd=poly;
+
+  poly.addTo(map);
+
+}
 
 // =======================
-// RAILWAY
+// DISTANCE FUNCTION
 // =======================
 
-L.polyline([
-  [35.2290,129.0870],
-  [35.2330,129.0860],
-  [35.2400,129.0880]
-],{
-  color:'#1A6BB5',
-  weight:4
-}).addTo(map);
-
-// =======================
-// DISTANCE
-// =======================
-
-function nearestDistance(coord,arr){
+function nearestDistance(latlng, features){
 
   let minDist = Infinity;
-  let nearestName = '';
 
-  arr.forEach(item=>{
+  let nearestName = '-';
+
+  features.features.forEach(f=>{
+
+    const [lng,lat] =
+      f.geometry.coordinates;
 
     const dist = map.distance(
-      coord,
-      item.coord
+      latlng,
+      L.latLng(lat,lng)
     ) / 1000;
 
     if(dist < minDist){
+
       minDist = dist;
-      nearestName = item.name;
+
+      nearestName =
+        f.properties.name || '-';
+
     }
 
   });
 
   return {
-    name:nearestName,
-    distance:minDist.toFixed(2)
+    distance:minDist.toFixed(2),
+    name:nearestName
   };
+
+}
+
+// =======================
+// BUFFER
+// =======================
+
+function renderBuffer(trainGJ){
+
+  const grp=L.layerGroup();
+
+  trainGJ.features.forEach(f=>{
+
+    const [lng,lat] =
+      f.geometry.coordinates;
+
+    L.circle(
+      [lat,lng],
+      {
+        radius:500,
+        color:'#1A6BB5',
+        weight:1.5,
+        fillColor:'#1A6BB5',
+        fillOpacity:.08,
+        dashArray:'5,4'
+      }
+    ).addTo(grp);
+
+  });
+
+  LY.buf=grp;
+
+  grp.addTo(map);
+
+}
+
+// =======================
+// RAILWAY
+// =======================
+
+function renderRailway(gj){
+
+  const lyr=L.geoJSON(gj,{
+
+    style:{
+      color:'#1A6BB5',
+      weight:3,
+      opacity:.85
+    }
+
+  });
+
+  LY.rail=lyr;
+
+  lyr.addTo(map);
+
+}
+
+// =======================
+// BUS
+// =======================
+
+function renderBus(gj){
+
+  let n=0;
+
+  const lyr=L.geoJSON(gj,{
+
+    pointToLayer:(f,ll)=>{
+
+      SEARCH.push({
+        name:f.properties.name || 'Bus Stop',
+        ll,
+        cat:'Bus Stop'
+      });
+
+      n++;
+
+      return L.marker(
+        ll,
+        {icon:busIcon}
+      );
+
+    },
+
+    onEachFeature:(f,l)=>{
+
+      l.bindPopup(`
+        <div>
+
+          <div class="pu-head"
+            style="
+              background:#FEF3E2;
+              border-color:#D4720A;
+            ">
+
+            <div class="pu-badge"
+              style="
+                background:#D4720A20;
+                color:#D4720A;
+              ">
+              🚌 Bus Stop
+            </div>
+
+            <div class="pu-name">
+              ${f.properties.name || 'Bus Stop'}
+            </div>
+
+          </div>
+
+          <div class="pu-body">
+
+            <div class="pu-row">
+              <span class="pu-key">
+                Wilayah
+              </span>
+
+              <span class="pu-val">
+                Geumjeong-gu
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+      `);
+
+    }
+
+  });
+
+  LY.bus=lyr;
+
+  lyr.addTo(map);
+
+  document.getElementById('cnt-bus')
+    .textContent=n;
+
+}
+
+// =======================
+// TRAIN
+// =======================
+
+function renderTrain(gj){
+
+  let n=0;
+
+  const lyr=L.geoJSON(gj,{
+
+    pointToLayer:(f,ll)=>{
+
+      SEARCH.push({
+        name:f.properties.name || 'Train Station',
+        ll,
+        cat:'Train Station'
+      });
+
+      n++;
+
+      return L.marker(
+        ll,
+        {icon:trainIcon}
+      );
+
+    },
+
+    onEachFeature:(f,l)=>{
+
+      l.bindPopup(`
+        <div>
+
+          <div class="pu-head"
+            style="
+              background:#EBF4FF;
+              border-color:#1A6BB5;
+            ">
+
+            <div class="pu-badge"
+              style="
+                background:#1A6BB520;
+                color:#1A6BB5;
+              ">
+              🚆 Train Station
+            </div>
+
+            <div class="pu-name">
+              ${f.properties.name || 'Train Station'}
+            </div>
+
+          </div>
+
+          <div class="pu-body">
+
+            <div class="pu-row">
+              <span class="pu-key">
+                Railway
+              </span>
+
+              <span class="pu-val">
+                ${f.properties.railway || 'Subway'}
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+      `);
+
+    }
+
+  });
+
+  LY.train=lyr;
+
+  lyr.addTo(map);
+
+  document.getElementById('cnt-train')
+    .textContent=n;
+
+}
+
+// =======================
+// EDUCATION
+// =======================
+
+function renderEducation(
+  gj,
+  trainData,
+  busData
+){
+
+  let sd=0;
+  let smp=0;
+  let sma=0;
+
+  const lyr=L.geoJSON(gj,{
+
+    pointToLayer:(f,ll)=>{
+
+      const lv=f.properties.isced_leve;
+
+      if(lv==1) sd++;
+      else if(lv==2) smp++;
+      else if(lv==3) sma++;
+
+      SEARCH.push({
+        name:f.properties.name || 'School',
+        ll,
+        cat:'Education'
+      });
+
+      return L.marker(
+        ll,
+        {
+          icon:schoolIcon(lv)
+        }
+      );
+
+    },
+
+    onEachFeature:(f,l)=>{
+
+      const latlng =
+        l.getLatLng();
+
+      const nearTrain =
+        nearestDistance(
+          latlng,
+          trainData
+        );
+
+      const nearBus =
+        nearestDistance(
+          latlng,
+          busData
+        );
+
+      const popup=`
+
+        <div>
+
+          <div class="pu-head"
+            style="
+              background:#E8F5EE;
+              border-color:#2E8B57;
+            ">
+
+            <div class="pu-badge"
+              style="
+                background:#2E8B5720;
+                color:#2E8B57;
+              ">
+              🎓 Education
+            </div>
+
+            <div class="pu-name">
+              ${f.properties.name || 'School'}
+            </div>
+
+          </div>
+
+          <div class="pu-body">
+
+            <div class="pu-row">
+
+              <span class="pu-key">
+                Level
+              </span>
+
+              <span class="pu-val">
+
+                ${
+                  f.properties.isced_leve==1
+                  ? 'SD'
+
+                  : f.properties.isced_leve==2
+                  ? 'SMP'
+
+                  : f.properties.isced_leve==3
+                  ? 'SMA/SMK'
+
+                  : 'School'
+                }
+
+              </span>
+
+            </div>
+
+            <div class="pu-row">
+
+              <span class="pu-key">
+                Train Station
+              </span>
+
+              <span class="pu-val">
+                ${nearTrain.name}
+              </span>
+
+            </div>
+
+            <div class="pu-row">
+
+              <span class="pu-key">
+                Distance
+              </span>
+
+              <span class="pu-tag"
+                style="
+                  background:#EBF4FF;
+                  color:#1A6BB5;
+                ">
+
+                ${nearTrain.distance} km
+
+              </span>
+
+            </div>
+
+            <div class="pu-row">
+
+              <span class="pu-key">
+                Bus Stop
+              </span>
+
+              <span class="pu-val">
+                ${nearBus.name}
+              </span>
+
+            </div>
+
+            <div class="pu-row">
+
+              <span class="pu-key">
+                Distance
+              </span>
+
+              <span class="pu-tag"
+                style="
+                  background:#FEF3E2;
+                  color:#D4720A;
+                ">
+
+                ${nearBus.distance} km
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      l.bindPopup(
+        popup,
+        {
+          maxWidth:300
+        }
+      );
+
+    }
+
+  });
+
+  LY.edu=lyr;
+
+  lyr.addTo(map);
+
+  document.getElementById('cnt-sd')
+    .textContent=sd;
+
+  document.getElementById('cnt-smp')
+    .textContent=smp;
+
+  document.getElementById('cnt-sma')
+    .textContent=sma;
 
 }
 
@@ -529,247 +808,185 @@ function nearestDistance(coord,arr){
 // SEARCH
 // =======================
 
-const SEARCH_DATA = [];
+const sinp =
+  document.getElementById('search-inp');
 
-// =======================
-// TRAIN
-// =======================
+const sres =
+  document.getElementById('search-res');
 
-trainStations.forEach(item=>{
+sinp.addEventListener('input',()=>{
 
-  SEARCH_DATA.push({
-    name:item.name,
-    coord:item.coord
-  });
+  const q=
+    sinp.value.trim().toLowerCase();
 
-  L.marker(item.coord,{
-    icon:iconTrain
-  })
-  .addTo(map)
-  .bindPopup(`
-    <div>
-      <div class="popup-head" style="background:#0C447C">
-        <div class="popup-title">${item.name}</div>
-      </div>
-
-      <div class="popup-body">
-        <div class="popup-row">
-          🚆 Train Station
-        </div>
-      </div>
-    </div>
-  `);
-
-});
-
-document.getElementById('trainCount').innerText =
-  trainStations.length;
-
-// =======================
-// BUS
-// =======================
-
-busStops.forEach(item=>{
-
-  SEARCH_DATA.push({
-    name:item.name,
-    coord:item.coord
-  });
-
-  L.marker(item.coord,{
-    icon:iconBus
-  })
-  .addTo(map)
-  .bindPopup(`
-    <div>
-      <div class="popup-head" style="background:#D4720A">
-        <div class="popup-title">${item.name}</div>
-      </div>
-
-      <div class="popup-body">
-        <div class="popup-row">
-          🚌 Bus Stop
-        </div>
-      </div>
-    </div>
-  `);
-
-});
-
-document.getElementById('busCount').innerText =
-  busStops.length;
-
-// =======================
-// SCHOOLS
-// =======================
-
-let sd=0,smp=0,sma=0;
-
-schools.forEach(item=>{
-
-  SEARCH_DATA.push({
-    name:item.name,
-    coord:item.coord
-  });
-
-  const nearTrain =
-    nearestDistance(item.coord,trainStations);
-
-  const nearBus =
-    nearestDistance(item.coord,busStops);
-
-  let icon;
-  let color;
-
-  if(item.level==='SD'){
-    icon=iconSD;
-    color='#2E8B57';
-    sd++;
-  }
-
-  else if(item.level==='SMP'){
-    icon=iconSMP;
-    color='#1A6BB5';
-    smp++;
-  }
-
-  else{
-    icon=iconSMA;
-    color='#C0392B';
-    sma++;
-  }
-
-  const marker = L.marker(item.coord,{
-    icon:icon
-  }).addTo(map);
-
-  marker.bindPopup(`
-    <div>
-
-      <div class="popup-head"
-        style="background:${color}">
-        <div class="popup-title">
-          ${item.name}
-        </div>
-      </div>
-
-      <div class="popup-body">
-
-        <div class="popup-row">
-          🎓 Tingkat:
-          <b>${item.level}</b>
-        </div>
-
-        <div class="popup-row">
-          🚆 Train Terdekat:
-          <b>${nearTrain.name}</b>
-        </div>
-
-        <div class="popup-row">
-          📏 Jarak:
-          <span class="popup-tag"
-            style="
-              background:#DBEAFE;
-              color:#1E40AF;
-            ">
-            ${nearTrain.distance} km
-          </span>
-        </div>
-
-        <div class="popup-row">
-          🚌 Bus Stop Terdekat:
-          <b>${nearBus.name}</b>
-        </div>
-
-        <div class="popup-row">
-          📏 Jarak:
-          <span class="popup-tag"
-            style="
-              background:#FED7AA;
-              color:#9A3412;
-            ">
-            ${nearBus.distance} km
-          </span>
-        </div>
-
-      </div>
-
-    </div>
-  `);
-
-  marker.on('mouseover',()=>{
-    marker.openPopup();
-  });
-
-});
-
-document.getElementById('sdCount').innerText = sd;
-document.getElementById('smpCount').innerText = smp;
-document.getElementById('smaCount').innerText = sma;
-
-// =======================
-// SEARCH
-// =======================
-
-const searchInput =
-  document.getElementById('searchInput');
-
-const searchResults =
-  document.getElementById('searchResults');
-
-searchInput.addEventListener('input',()=>{
-
-  const q =
-    searchInput.value.toLowerCase();
-
-  searchResults.innerHTML='';
+  sres.innerHTML='';
 
   if(!q){
-    searchResults.style.display='none';
+
+    sres.style.display='none';
+
     return;
+
   }
 
-  const results = SEARCH_DATA.filter(item=>
-    item.name.toLowerCase().includes(q)
-  );
+  const hits=SEARCH
+    .filter(d=>
+      d.name
+      .toLowerCase()
+      .includes(q)
+    )
+    .slice(0,8);
 
-  results.forEach(item=>{
+  if(!hits.length){
 
-    const div =
-      document.createElement('div');
+    sres.style.display='none';
 
-    div.className='search-item';
+    return;
 
-    div.innerHTML=item.name;
+  }
 
-    div.onclick=()=>{
+  hits.forEach(d=>{
 
-      map.setView(item.coord,16);
+    const el=document.createElement('div');
 
-      searchResults.style.display='none';
+    el.className='s-item';
+
+    el.innerHTML=`
+      <div class="s-item-name">
+        ${d.name}
+      </div>
+
+      <div class="s-item-cat">
+        ${d.cat}
+      </div>
+    `;
+
+    el.onclick=()=>{
+
+      map.setView(d.ll,16);
+
+      sres.style.display='none';
+
+      sinp.value=d.name;
 
     };
 
-    searchResults.appendChild(div);
+    sres.appendChild(el);
 
   });
 
-  searchResults.style.display='block';
+  sres.style.display='block';
 
 });
 
 // =======================
-// BUTTON
+// FETCH
 // =======================
 
-document.getElementById('zoomBtn')
-.addEventListener('click',()=>{
+async function tryFetch(
+  url,
+  fallback
+){
 
-  map.fitBounds(GEUMJEONG_BOUNDS);
+  try{
 
-});
+    const r=await fetch(url);
+
+    if(!r.ok)
+      throw new Error();
+
+    return await r.json();
+
+  }catch{
+
+    return fallback;
+
+  }
+
+}
+
+// =======================
+// SAMPLE DATA
+// =======================
+
+const DATA={
+
+  education:{
+    type:'FeatureCollection',
+    features:[]
+  },
+
+  train:{
+    type:'FeatureCollection',
+    features:[]
+  },
+
+  bus:{
+    type:'FeatureCollection',
+    features:[]
+  },
+
+  railway:{
+    type:'FeatureCollection',
+    features:[]
+  }
+
+};
+
+// =======================
+// INIT
+// =======================
+
+async function init(){
+
+  const [
+    edu,
+    train,
+    bus,
+    rail
+
+  ] = await Promise.all([
+
+    tryFetch(
+      './data/education_geumjeong.geojson',
+      DATA.education
+    ),
+
+    tryFetch(
+      './data/train_station_geumjeong.geojson',
+      DATA.train
+    ),
+
+    tryFetch(
+      './data/bus_station_geumjeong.geojson',
+      DATA.bus
+    ),
+
+    tryFetch(
+      './data/railway_geumjeong.geojson',
+      DATA.railway
+    )
+
+  ]);
+
+  renderBoundary();
+
+  renderBuffer(train);
+
+  renderRailway(rail);
+
+  renderBus(bus);
+
+  renderTrain(train);
+
+  renderEducation(
+    edu,
+    train,
+    bus
+  );
+
+}
+
+init();
 
 </script>
-
-</body>
-</html>
