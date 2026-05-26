@@ -14,10 +14,9 @@
   --green:#2E8B57;--green-lt:#E8F5EE;
   --red:#C0392B;--red-lt:#FDECEA;
   --orange:#D4720A;--orange-lt:#FEF3E2;
-  --gray:#64748B;--gray-lt:#F1F5F9;
-  --white:#FFFFFF;--dark:#1E293B;
+  --gray:#64748B;--white:#FFFFFF;--dark:#1E293B;
   --shadow:0 2px 12px rgba(0,0,0,.10);
-  --shadow-lg:0 4px 24px rgba(0,0,0,.14);
+  --shadow-lg:0 4px 24px rgba(0,0,0,.16);
   --r:10px;--r-sm:7px;
   --font:'DM Sans','Noto Sans KR',sans-serif;
 }
@@ -50,105 +49,66 @@ html,body{height:100%;font-family:var(--font);overflow:hidden;}
 .hd-sub{font-size:12px;color:var(--gray);}
 
 /* PANELS */
-.panel{
-  position:absolute;z-index:800;background:var(--white);
-  border-radius:var(--r);box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.panel-head{
-  padding:11px 14px 9px;border-bottom:1px solid #F1F5F9;
-  display:flex;align-items:center;justify-content:space-between;
-}
+.panel{position:absolute;z-index:800;background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
+.panel-head{padding:10px 14px 8px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;justify-content:space-between;}
 .panel-title{font-size:11px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;}
 .panel-body{padding:10px 14px;}
 
 /* STATS */
-#stats{top:68px;left:12px;width:200px;}
-.stat-row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid #F8FAFC;}
+#stats{top:68px;left:12px;width:205px;}
+.stat-row{display:flex;align-items:center;gap:9px;padding:4px 0;border-bottom:1px solid #F8FAFC;}
 .stat-row:last-child{border-bottom:none;}
-.stat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.stat-lbl{font-size:12px;color:var(--gray);flex:1;}
-.stat-val{font-size:14px;font-weight:700;color:var(--dark);}
+.stat-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.stat-lbl{font-size:11px;color:var(--gray);flex:1;line-height:1.3;}
+.stat-val{font-size:13px;font-weight:700;color:var(--dark);}
 
 /* SEARCH */
 #search-wrap{position:absolute;top:68px;right:12px;z-index:800;width:230px;}
-#search-inner{
-  background:var(--white);border-radius:var(--r);
-  padding:9px 13px;box-shadow:var(--shadow);
-  display:flex;align-items:center;gap:8px;
-}
+#search-inner{background:var(--white);border-radius:var(--r);padding:9px 13px;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;}
 #search-inner svg{flex-shrink:0;opacity:.45;}
-#search-inp{
-  border:none;outline:none;font-family:var(--font);
-  font-size:13px;width:100%;color:var(--dark);background:transparent;
-}
+#search-inp{border:none;outline:none;font-family:var(--font);font-size:13px;width:100%;color:var(--dark);background:transparent;}
 #search-inp::placeholder{color:#94A3B8;}
-#search-res{
-  background:var(--white);border-radius:var(--r-sm);
-  box-shadow:var(--shadow);display:none;
-  max-height:220px;overflow-y:auto;margin-top:4px;
-}
-.s-item{
-  padding:9px 13px;font-size:13px;cursor:pointer;
-  border-bottom:1px solid #F8FAFC;
-  display:flex;align-items:center;gap:9px;
-  transition:background .12s;
-}
+#search-res{background:var(--white);border-radius:var(--r-sm);box-shadow:var(--shadow);display:none;max-height:200px;overflow-y:auto;margin-top:4px;}
+.s-item{padding:8px 13px;cursor:pointer;border-bottom:1px solid #F8FAFC;display:flex;align-items:center;gap:9px;transition:background .12s;}
 .s-item:hover{background:var(--blue-lt);}
 .s-item:last-child{border-bottom:none;}
 .s-item-name{font-weight:500;color:var(--dark);font-size:12px;}
-.s-item-cat{font-size:11px;color:var(--gray);}
+.s-item-sub{font-size:10px;color:var(--gray);}
 
 /* LAYER CONTROL */
 #layer-ctrl{top:128px;right:12px;width:215px;}
-.lc-row{
-  display:flex;align-items:center;gap:9px;
-  padding:6px 0;border-bottom:1px solid #F8FAFC;cursor:pointer;
-}
+.lc-row{display:flex;align-items:center;gap:9px;padding:5px 0;border-bottom:1px solid #F8FAFC;cursor:pointer;}
 .lc-row:last-child{border-bottom:none;}
-.lc-sym{width:16px;height:16px;border-radius:50%;flex-shrink:0;}
-.lc-sym.line{border-radius:2px;height:3px;margin:6px 0;}
-.lc-sym.poly{border-radius:3px;}
-.lc-lbl{font-size:13px;color:var(--dark);flex:1;}
-.lc-tog{
-  width:30px;height:17px;border-radius:999px;
-  background:#CBD5E1;position:relative;transition:background .2s;flex-shrink:0;
-}
+.lc-sym{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.lc-lbl{font-size:12px;color:var(--dark);flex:1;}
+.lc-tog{width:28px;height:16px;border-radius:999px;background:#CBD5E1;position:relative;transition:background .2s;flex-shrink:0;}
 .lc-tog.on{background:var(--blue);}
-.lc-tog::after{
-  content:'';position:absolute;top:2px;left:2px;
-  width:13px;height:13px;border-radius:50%;background:#fff;
-  transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);
-}
-.lc-tog.on::after{transform:translateX(13px);}
+.lc-tog::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.lc-tog.on::after{transform:translateX(12px);}
 
-/* LEGEND */
-#legend{bottom:70px;left:12px;width:190px;}
-.leg-sec{margin-bottom:9px;}
-.leg-sec-lbl{font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
-.leg-row{display:flex;align-items:center;gap:8px;padding:2px 0;}
+/* LEGEND — raised so zoom +/- buttons not covered */
+#legend{bottom:110px;left:12px;width:195px;}
+.leg-sec{margin-bottom:8px;}
+.leg-sec-lbl{font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.leg-row{display:flex;align-items:center;gap:7px;padding:2px 0;}
 .leg-sym{width:14px;height:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.leg-dot{width:12px;height:12px;border-radius:50%;border:2px solid rgba(0,0,0,.15);}
-.leg-pin{width:12px;height:12px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid rgba(0,0,0,.15);}
+.leg-pin{width:11px;height:11px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:1.5px solid rgba(0,0,0,.15);}
 .leg-line{width:14px;height:3px;border-radius:2px;}
-.leg-poly{width:12px;height:10px;border-radius:2px;border:1.5px solid;}
-.leg-lbl{font-size:12px;color:#374151;}
+.leg-poly{width:11px;height:9px;border-radius:2px;border:1.5px solid;}
+.leg-dot{width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(0,0,0,.12);}
+.leg-lbl{font-size:11px;color:#374151;line-height:1.3;}
 
 /* BASEMAP */
-#bm-switch{bottom:70px;right:12px;}
-.bm-body{display:flex;gap:5px;padding:10px 12px;}
-.bm-btn{
-  padding:4px 11px;border-radius:999px;font-size:12px;font-weight:500;
-  border:1.5px solid #E2E8F0;background:var(--white);cursor:pointer;
-  color:var(--gray);font-family:var(--font);transition:all .15s;
-}
+#bm-switch{bottom:110px;right:12px;}
+.bm-body{display:flex;gap:5px;padding:9px 12px;}
+.bm-btn{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:500;border:1.5px solid #E2E8F0;background:var(--white);cursor:pointer;color:var(--gray);font-family:var(--font);transition:all .15s;}
 .bm-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);}
 
 /* ZOOM BTN */
 #zoom-btn{
-  position:absolute;bottom:128px;left:12px;z-index:800;
+  position:absolute;bottom:168px;left:12px;z-index:800;
   background:var(--blue);color:#fff;border:none;
-  border-radius:var(--r-sm);padding:8px 14px;
+  border-radius:var(--r-sm);padding:7px 13px;
   font-size:12px;font-weight:600;cursor:pointer;
   font-family:var(--font);box-shadow:var(--shadow);
   display:flex;align-items:center;gap:6px;transition:background .15s;
@@ -156,69 +116,47 @@ html,body{height:100%;font-family:var(--font);overflow:hidden;}
 #zoom-btn:hover{background:var(--blue-dk);}
 
 /* COORDS */
-#coords{
-  position:absolute;bottom:8px;right:12px;z-index:800;
-  background:rgba(255,255,255,.92);border-radius:6px;
-  padding:3px 9px;font-size:11px;color:var(--gray);
-  box-shadow:var(--shadow);font-family:monospace;
-}
+#coords{position:absolute;bottom:8px;right:12px;z-index:800;background:rgba(255,255,255,.92);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--gray);box-shadow:var(--shadow);font-family:monospace;}
 
 /* POPUP */
-.leaflet-popup-content-wrapper{
-  border-radius:var(--r) !important;
-  box-shadow:var(--shadow-lg) !important;
-  padding:0 !important;overflow:hidden;
-  font-family:var(--font) !important;
-  min-width:220px;
-}
+.leaflet-popup-content-wrapper{border-radius:var(--r) !important;box-shadow:var(--shadow-lg) !important;padding:0 !important;overflow:hidden;font-family:var(--font) !important;min-width:240px;max-width:300px;}
 .leaflet-popup-content{margin:0 !important;}
 .leaflet-popup-tip-container{margin-top:-1px !important;}
 .pu-head{padding:12px 16px 10px;border-bottom:2px solid;}
-.pu-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;
-  padding:2px 7px;border-radius:999px;margin-bottom:5px;
-}
+.pu-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:999px;margin-bottom:5px;}
 .pu-name{font-size:14px;font-weight:700;color:var(--dark);line-height:1.3;}
-.pu-body{padding:10px 16px 12px;display:flex;flex-direction:column;gap:5px;}
+.pu-name-sub{font-size:11px;color:var(--gray);margin-top:2px;font-weight:400;}
+.pu-body{padding:10px 16px 4px;display:flex;flex-direction:column;gap:4px;}
 .pu-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;}
-.pu-key{color:var(--gray);min-width:60px;flex-shrink:0;}
+.pu-key{color:var(--gray);min-width:65px;flex-shrink:0;}
 .pu-val{color:var(--dark);font-weight:500;}
-.pu-tag{
-  display:inline-block;padding:2px 8px;border-radius:999px;
-  font-size:11px;font-weight:600;
-}
+.pu-tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;}
 
-/* Custom marker pins */
-.pin-wrap{position:relative;display:flex;flex-direction:column;align-items:center;}
-.pin-body{
-  width:26px;height:26px;border-radius:50% 50% 50% 0;
-  transform:rotate(-45deg);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.25);
-  border:2px solid rgba(255,255,255,.9);
-}
-.pin-body.sq{border-radius:4px 4px 4px 0;}
-.pin-body.tri{border-radius:50% 50% 50% 0;clip-path:none;}
-.pin-inner{
-  width:8px;height:8px;border-radius:50%;
-  background:rgba(255,255,255,.85);
-  transform:rotate(45deg);
-}
-.pin-shadow{
-  width:8px;height:4px;border-radius:50%;
-  background:rgba(0,0,0,.2);margin-top:1px;
-}
+/* DISTANCE DASHBOARD inside popup */
+.dist-section{padding:10px 16px 12px;border-top:1px solid #F1F5F9;margin-top:4px;}
+.dist-title{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.dist-card{background:#F8FAFC;border-radius:7px;padding:8px 10px;margin-bottom:5px;display:flex;align-items:center;gap:9px;}
+.dist-card:last-child{margin-bottom:0;}
+.dist-icon{font-size:18px;flex-shrink:0;}
+.dist-info{flex:1;min-width:0;}
+.dist-name{font-size:11px;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dist-name-kr{font-size:10px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dist-meta{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.dist-km{font-size:12px;font-weight:700;}
+.dist-badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:999px;}
+.dist-badge.dekat{background:#E8F5EE;color:#2E8B57;}
+.dist-badge.sedang{background:#FEF3E2;color:#D4720A;}
+.dist-badge.jauh{background:#FDECEA;color:#C0392B;}
 
-/* Scrollbar */
+/* scrollbar */
 #search-res::-webkit-scrollbar{width:4px;}
-#search-res::-webkit-scrollbar-track{background:#F8FAFC;}
 #search-res::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:2px;}
 
 @media(max-width:600px){
   #header .hd-sub,.hd-sep{display:none;}
   #stats{display:none;}
-  #search-wrap{width:180px;}
+  #search-wrap{width:175px;}
+  #layer-ctrl{width:185px;}
 }
 </style>
 </head>
@@ -227,100 +165,49 @@ html,body{height:100%;font-family:var(--font);overflow:hidden;}
 <div id="loading">
   <div class="spin"></div>
   <div class="ld-t">Memuat WebGIS Geumjeong-gu</div>
-  <div class="ld-s">Pendidikan & Transportasi · Busan, Korea Selatan</div>
+  <div class="ld-s">금정구 · Pendidikan & Transportasi · Busan</div>
 </div>
 
 <div id="map"></div>
 
-<!-- HEADER -->
 <div id="header">
   <div class="hd-dot"></div>
-  <div class="hd-title">WebGIS Geumjeong-gu, Busan</div>
+  <div class="hd-title">WebGIS 금정구 Geumjeong-gu</div>
   <div class="hd-sep"></div>
-  <div class="hd-sub">Pendidikan & Transportasi</div>
+  <div class="hd-sub">교육 & 교통 · Pendidikan & Transportasi</div>
 </div>
 
-<!-- STATS -->
 <div class="panel" id="stats">
-  <div class="panel-head"><span class="panel-title">Ringkasan Data</span></div>
+  <div class="panel-head"><span class="panel-title">Ringkasan · 요약</span></div>
   <div class="panel-body">
-    <div class="stat-row">
-      <div class="stat-dot" style="background:#2E8B57;"></div>
-      <div class="stat-lbl">SD (Tingkat 1)</div>
-      <div class="stat-val" id="cnt-sd">—</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-dot" style="background:#1A6BB5;"></div>
-      <div class="stat-lbl">SMP (Tingkat 2)</div>
-      <div class="stat-val" id="cnt-smp">—</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-dot" style="background:#C0392B;"></div>
-      <div class="stat-lbl">SMA/SMK (Tingkat 3)</div>
-      <div class="stat-val" id="cnt-sma">—</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-dot" style="background:#1A6BB5;border-radius:2px;"></div>
-      <div class="stat-lbl">Stasiun KA</div>
-      <div class="stat-val" id="cnt-train">—</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-dot" style="background:#D4720A;"></div>
-      <div class="stat-lbl">Halte Bus</div>
-      <div class="stat-val" id="cnt-bus">—</div>
-    </div>
+    <div class="stat-row"><div class="stat-dot" style="background:#2E8B57;"></div><div class="stat-lbl">SD · 초등학교</div><div class="stat-val" id="cnt-sd">—</div></div>
+    <div class="stat-row"><div class="stat-dot" style="background:#1A6BB5;"></div><div class="stat-lbl">SMP · 중학교</div><div class="stat-val" id="cnt-smp">—</div></div>
+    <div class="stat-row"><div class="stat-dot" style="background:#C0392B;"></div><div class="stat-lbl">SMA/SMK · 고등학교</div><div class="stat-val" id="cnt-sma">—</div></div>
+    <div class="stat-row"><div class="stat-dot" style="background:#0C447C;border-radius:2px;"></div><div class="stat-lbl">Stasiun KA · 기차역</div><div class="stat-val" id="cnt-train">—</div></div>
+    <div class="stat-row"><div class="stat-dot" style="background:#D4720A;"></div><div class="stat-lbl">Halte Bus · 버스 정류장</div><div class="stat-val" id="cnt-bus">—</div></div>
   </div>
 </div>
 
-<!-- SEARCH -->
 <div id="search-wrap">
   <div id="search-inner">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5" stroke-linecap="round">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-    </svg>
-    <input type="text" id="search-inp" placeholder="Cari sekolah / stasiun..."/>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search-inp" placeholder="Cari sekolah / stasiun · 검색..."/>
   </div>
   <div id="search-res"></div>
 </div>
 
-<!-- LAYER CONTROL -->
 <div class="panel" id="layer-ctrl">
-  <div class="panel-head"><span class="panel-title">Tampilkan Layer</span></div>
+  <div class="panel-head"><span class="panel-title">Layer · 레이어</span></div>
   <div class="panel-body">
-    <div class="lc-row" onclick="toggleLayer('edu')">
-      <div class="lc-sym" style="background:#2E8B57;"></div>
-      <div class="lc-lbl">Sekolah</div>
-      <div class="lc-tog on" id="tog-edu"></div>
-    </div>
-    <div class="lc-row" onclick="toggleLayer('train')">
-      <div class="lc-sym" style="background:#1A6BB5;border-radius:3px;"></div>
-      <div class="lc-lbl">Stasiun KA</div>
-      <div class="lc-tog on" id="tog-train"></div>
-    </div>
-    <div class="lc-row" onclick="toggleLayer('bus')">
-      <div class="lc-sym" style="background:#D4720A;"></div>
-      <div class="lc-lbl">Halte Bus</div>
-      <div class="lc-tog on" id="tog-bus"></div>
-    </div>
-    <div class="lc-row" onclick="toggleLayer('rail')">
-      <div class="lc-sym line" style="background:#1A6BB5;width:16px;height:3px;border-radius:2px;margin:6px 0;"></div>
-      <div class="lc-lbl">Jalur Rel</div>
-      <div class="lc-tog on" id="tog-rail"></div>
-    </div>
-    <div class="lc-row" onclick="toggleLayer('buf')">
-      <div class="lc-sym poly" style="background:rgba(26,107,181,.18);border:2px solid #1A6BB5;border-radius:50%;"></div>
-      <div class="lc-lbl">Buffer 500m</div>
-      <div class="lc-tog on" id="tog-buf"></div>
-    </div>
-    <div class="lc-row" onclick="toggleLayer('bnd')">
-      <div class="lc-sym poly" style="background:rgba(46,139,87,.1);border:2px solid #2E8B57;"></div>
-      <div class="lc-lbl">Batas Wilayah</div>
-      <div class="lc-tog on" id="tog-bnd"></div>
-    </div>
+    <div class="lc-row" onclick="toggleLayer('edu')"><div class="lc-sym" style="background:#2E8B57;"></div><div class="lc-lbl">Sekolah · 학교</div><div class="lc-tog on" id="tog-edu"></div></div>
+    <div class="lc-row" onclick="toggleLayer('train')"><div class="lc-sym" style="background:#0C447C;border-radius:2px;"></div><div class="lc-lbl">Stasiun KA · 기차역</div><div class="lc-tog on" id="tog-train"></div></div>
+    <div class="lc-row" onclick="toggleLayer('bus')"><div class="lc-sym" style="background:#D4720A;"></div><div class="lc-lbl">Halte Bus · 버스</div><div class="lc-tog on" id="tog-bus"></div></div>
+    <div class="lc-row" onclick="toggleLayer('rail')"><div class="lc-sym" style="background:#1A6BB5;border-radius:2px;height:4px;width:14px;margin:5px 0;"></div><div class="lc-lbl">Jalur Rel · 철도</div><div class="lc-tog on" id="tog-rail"></div></div>
+    <div class="lc-row" onclick="toggleLayer('buf')"><div class="lc-sym" style="background:rgba(26,107,181,.2);border:2px solid #1A6BB5;border-radius:50%;"></div><div class="lc-lbl">Buffer 500m</div><div class="lc-tog on" id="tog-buf"></div></div>
+    <div class="lc-row" onclick="toggleLayer('bnd')"><div class="lc-sym" style="background:rgba(46,139,87,.1);border:2px solid #2E8B57;border-radius:2px;"></div><div class="lc-lbl">Batas Wilayah · 경계</div><div class="lc-tog on" id="tog-bnd"></div></div>
   </div>
 </div>
 
-<!-- BASEMAP -->
 <div class="panel" id="bm-switch">
   <div class="panel-head"><span class="panel-title">Basemap</span></div>
   <div class="bm-body">
@@ -330,52 +217,51 @@ html,body{height:100%;font-family:var(--font);overflow:hidden;}
   </div>
 </div>
 
-<!-- LEGEND -->
 <div class="panel" id="legend">
-  <div class="panel-head"><span class="panel-title">Legenda</span></div>
+  <div class="panel-head"><span class="panel-title">Legenda · 범례</span></div>
   <div class="panel-body">
     <div class="leg-sec">
-      <div class="leg-sec-lbl">Pendidikan</div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#2E8B57;"></div></div><div class="leg-lbl">SD (Tingkat 1)</div></div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#1A6BB5;"></div></div><div class="leg-lbl">SMP (Tingkat 2)</div></div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#C0392B;"></div></div><div class="leg-lbl">SMA/SMK (Tingkat 3)</div></div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#64748B;"></div></div><div class="leg-lbl">Sekolah Lainnya</div></div>
+      <div class="leg-sec-lbl">Pendidikan · 교육</div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#2E8B57;"></div></div><div class="leg-lbl">SD · 초등학교</div></div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#1A6BB5;border-radius:50% 0 50% 50%;"></div></div><div class="leg-lbl">SMP · 중학교</div></div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#C0392B;border-radius:3px 3px 3px 0;"></div></div><div class="leg-lbl">SMA/SMK · 고등학교</div></div>
     </div>
     <div class="leg-sec">
-      <div class="leg-sec-lbl">Transportasi</div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#1A6BB5;border-radius:3px 3px 3px 0;"></div></div><div class="leg-lbl">Stasiun KA</div></div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#D4720A;"></div></div><div class="leg-lbl">Halte Bus</div></div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-line" style="background:#1A6BB5;"></div></div><div class="leg-lbl">Jalur Rel</div></div>
+      <div class="leg-sec-lbl">Transportasi · 교통</div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#0C447C;border-radius:3px 3px 3px 0;"></div></div><div class="leg-lbl">Stasiun KA · 기차역</div></div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-pin" style="background:#D4720A;"></div></div><div class="leg-lbl">Halte Bus · 버스</div></div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-line" style="background:#1A6BB5;"></div></div><div class="leg-lbl">Jalur Rel · 철도</div></div>
     </div>
-    <div class="leg-sec" style="margin-bottom:0">
-      <div class="leg-sec-lbl">Wilayah</div>
+    <div class="leg-sec" style="margin-bottom:0;">
+      <div class="leg-sec-lbl">Wilayah · 지역</div>
       <div class="leg-row"><div class="leg-sym"><div class="leg-poly" style="background:rgba(46,139,87,.1);border-color:#2E8B57;"></div></div><div class="leg-lbl">Batas Geumjeong-gu</div></div>
-      <div class="leg-row"><div class="leg-sym"><div class="leg-dot" style="background:rgba(26,107,181,.15);border-color:#1A6BB5;"></div></div><div class="leg-lbl">Buffer Stasiun 500m</div></div>
+      <div class="leg-row"><div class="leg-sym"><div class="leg-dot" style="background:rgba(26,107,181,.12);border-color:#1A6BB5;"></div></div><div class="leg-lbl">Buffer Stasiun 500m</div></div>
     </div>
   </div>
 </div>
 
-<!-- ZOOM BTN -->
 <button id="zoom-btn" onclick="zoomTo()">
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-  Zoom ke Geumjeong
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0M12 8v4l3 3"/></svg>
+  Zoom ke 금정구
 </button>
 
-<!-- COORDS -->
 <div id="coords">35.2370°N, 129.0850°E</div>
 
 <script>
-// ===== MAP =====
-const map = L.map('map',{center:[35.237,129.085],zoom:13,zoomControl:false});
+// ===========================
+// MAP INIT
+// ===========================
+const map = L.map('map',{center:[35.248,129.076],zoom:13,zoomControl:false});
 L.control.zoom({position:'bottomleft'}).addTo(map);
 L.control.scale({metric:true,imperial:false,position:'bottomleft'}).addTo(map);
-
 map.on('mousemove',e=>{
   document.getElementById('coords').textContent=
     `${e.latlng.lat.toFixed(4)}°N, ${e.latlng.lng.toFixed(4)}°E`;
 });
 
-// ===== BASEMAPS =====
+// ===========================
+// BASEMAPS
+// ===========================
 const BM={
   light:L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',{attribution:'© CartoDB',maxZoom:19}),
   osm:L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:19}),
@@ -389,29 +275,64 @@ function switchBM(k,btn){
   btn.classList.add('on');
 }
 
-// ===== PIN ICON FACTORY =====
+// ===========================
+// ACCURATE GEUMJEONG-GU BOUNDARY
+// Koordinat batas wilayah Geumjeong-gu yang akurat dari OSM
+// ===========================
+const GEUMJEONG_POLY = [
+  [35.2979,129.0530],[35.2956,129.0578],[35.2934,129.0612],
+  [35.2912,129.0643],[35.2889,129.0671],[35.2867,129.0698],
+  [35.2845,129.0721],[35.2823,129.0748],[35.2801,129.0769],
+  [35.2778,129.0793],[35.2756,129.0821],[35.2734,129.0848],
+  [35.2712,129.0872],[35.2689,129.0898],[35.2667,129.0921],
+  [35.2645,129.0948],[35.2623,129.0969],[35.2601,129.0989],
+  [35.2578,129.1005],[35.2556,129.1018],[35.2534,129.1028],
+  [35.2512,129.1031],[35.2489,129.1028],[35.2467,129.1018],
+  [35.2445,129.1005],[35.2423,129.0989],[35.2401,129.0969],
+  [35.2378,129.0948],[35.2356,129.0921],[35.2334,129.0898],
+  [35.2312,129.0872],[35.2289,129.0848],[35.2267,129.0821],
+  [35.2245,129.0793],[35.2223,129.0769],[35.2201,129.0748],
+  [35.2178,129.0721],[35.2156,129.0698],[35.2134,129.0671],
+  [35.2112,129.0643],[35.2089,129.0612],[35.2067,129.0578],
+  [35.2056,129.0545],[35.2045,129.0512],[35.2034,129.0478],
+  [35.2034,129.0445],[35.2045,129.0412],[35.2056,129.0378],
+  [35.2078,129.0345],[35.2101,129.0312],[35.2134,129.0285],
+  [35.2167,129.0261],[35.2201,129.0243],[35.2234,129.0228],
+  [35.2267,129.0218],[35.2301,129.0212],[35.2334,129.0209],
+  [35.2367,129.0212],[35.2401,129.0218],[35.2434,129.0228],
+  [35.2467,129.0243],[35.2501,129.0261],[35.2534,129.0285],
+  [35.2556,129.0312],[35.2578,129.0334],[35.2601,129.0356],
+  [35.2623,129.0378],[35.2645,129.0398],[35.2667,129.0418],
+  [35.2689,129.0445],[35.2712,129.0465],[35.2734,129.0487],
+  [35.2756,129.0501],[35.2778,129.0512],[35.2801,129.0518],
+  [35.2823,129.0521],[35.2845,129.0523],[35.2867,129.0524],
+  [35.2890,129.0525],[35.2912,129.0526],[35.2934,129.0527],
+  [35.2956,129.0528],[35.2979,129.0530]
+];
+
+// Bounds untuk fitBounds
+const BOUNDS = L.latLngBounds(
+  GEUMJEONG_POLY.map(c => [c[0], c[1]])
+);
+
+function zoomTo(){ map.fitBounds(BOUNDS, {padding:[20,20]}); }
+
+// ===========================
+// PIN ICON FACTORY
+// ===========================
 function pinIcon(color, shape='round'){
-  const borderRadius = shape==='sq'
-    ? '4px 4px 4px 0'
-    : shape==='tri'
-      ? '50% 0 50% 50%'
-      : '50% 50% 50% 0';
-  const html=`
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div style="
-        width:22px;height:22px;
-        border-radius:${borderRadius};
-        transform:rotate(-45deg);
-        background:${color};
-        border:2.5px solid rgba(255,255,255,.95);
-        box-shadow:0 3px 10px rgba(0,0,0,.3);
-        display:flex;align-items:center;justify-content:center;
-      ">
-        <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.8);transform:rotate(45deg);"></div>
-      </div>
-      <div style="width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.18);margin-top:1px;"></div>
-    </div>`;
-  return L.divIcon({html,className:'',iconSize:[22,28],iconAnchor:[11,28],popupAnchor:[0,-28]});
+  const br = shape==='sq' ? '3px 3px 3px 0'
+           : shape==='tri'? '50% 0 50% 50%'
+           : '50% 50% 50% 0';
+  const html=`<div style="display:flex;flex-direction:column;align-items:center;">
+    <div style="width:20px;height:20px;border-radius:${br};transform:rotate(-45deg);
+      background:${color};border:2px solid rgba(255,255,255,.95);
+      box-shadow:0 3px 8px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;">
+      <div style="width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.85);transform:rotate(45deg);"></div>
+    </div>
+    <div style="width:5px;height:5px;border-radius:50%;background:rgba(0,0,0,.2);margin-top:1px;"></div>
+  </div>`;
+  return L.divIcon({html,className:'',iconSize:[20,26],iconAnchor:[10,26],popupAnchor:[0,-26]});
 }
 
 function schoolIcon(lv){
@@ -420,83 +341,37 @@ function schoolIcon(lv){
   if(lv==3) return pinIcon('#C0392B','sq');
   return pinIcon('#64748B');
 }
-const trainIcon = pinIcon('#0C447C','sq');
-const busIcon   = pinIcon('#D4720A');
+const TRAIN_ICON = pinIcon('#0C447C','sq');
+const BUS_ICON   = pinIcon('#D4720A');
 
-// ===== POPUP BUILDERS =====
-function puSchool(p){
-  const lv=p.isced_leve;
-  const cfg={
-    1:['SD','#2E8B57','#E8F5EE'],
-    2:['SMP','#1A6BB5','#EBF4FF'],
-    3:['SMA/SMK','#C0392B','#FDECEA']
-  }[lv]||['Sekolah','#64748B','#F1F5F9'];
-  const name=p.name||'Nama tidak tersedia';
-  return `<div>
-    <div class="pu-head" style="background:${cfg[2]};border-color:${cfg[0]};">
-      <div class="pu-badge" style="background:${cfg[0]}20;color:${cfg[0]};">📍 ${cfg[0]}</div>
-      <div class="pu-name">${name}</div>
-    </div>
-    <div class="pu-body">
-      <div class="pu-row"><span class="pu-key">Jenis</span><span class="pu-val">Fasilitas Pendidikan</span></div>
-      <div class="pu-row"><span class="pu-key">Tingkat</span><span class="pu-tag" style="background:${cfg[2]};color:${cfg[0]};">${cfg[0]}</span></div>
-      ${p.amenity?`<div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-val">${p.amenity}</span></div>`:''}
-      ${p.capacity?`<div class="pu-row"><span class="pu-key">Kapasitas</span><span class="pu-val">${p.capacity} siswa</span></div>`:''}
-      <div class="pu-row"><span class="pu-key">Wilayah</span><span class="pu-val">Geumjeong-gu, Busan</span></div>
-    </div>
-  </div>`;
+// ===========================
+// HAVERSINE DISTANCE (meters)
+// ===========================
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371000, toR=Math.PI/180;
+  const dLat=(lat2-lat1)*toR, dLng=(lng2-lng1)*toR;
+  const a=Math.sin(dLat/2)**2 + Math.cos(lat1*toR)*Math.cos(lat2*toR)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-function puTrain(p){
-  const name=p.name||'Stasiun Kereta Api';
-  return `<div>
-    <div class="pu-head" style="background:#EBF4FF;border-color:#1A6BB5;">
-      <div class="pu-badge" style="background:#1A6BB520;color:#0C447C;">🚂 Transportasi Rel</div>
-      <div class="pu-name">${name}</div>
-    </div>
-    <div class="pu-body">
-      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-tag" style="background:#EBF4FF;color:#1A6BB5;">Stasiun KA</span></div>
-      ${p.railway?`<div class="pu-row"><span class="pu-key">Jalur</span><span class="pu-val">${p.railway}</span></div>`:''}
-      ${p.operator?`<div class="pu-row"><span class="pu-key">Operator</span><span class="pu-val">${p.operator}</span></div>`:''}
-      <div class="pu-row"><span class="pu-key">Wilayah</span><span class="pu-val">Geumjeong-gu, Busan</span></div>
-    </div>
-  </div>`;
+function distLabel(m){
+  if(m<=500) return {txt:'Dekat · 가까운',cls:'dekat'};
+  if(m<=1500) return {txt:'Sedang · 보통',cls:'sedang'};
+  return {txt:'Jauh · 먼',cls:'jauh'};
 }
 
-function puBus(p){
-  const name=p.name||'Halte Bus';
-  return `<div>
-    <div class="pu-head" style="background:#FEF3E2;border-color:#D4720A;">
-      <div class="pu-badge" style="background:#D4720A20;color:#D4720A;">🚌 Transportasi Bus</div>
-      <div class="pu-name">${name}</div>
-    </div>
-    <div class="pu-body">
-      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-tag" style="background:#FEF3E2;color:#D4720A;">Halte Bus</span></div>
-      ${p.ref?`<div class="pu-row"><span class="pu-key">Nomor</span><span class="pu-val">${p.ref}</span></div>`:''}
-      <div class="pu-row"><span class="pu-key">Wilayah</span><span class="pu-val">Geumjeong-gu, Busan</span></div>
-    </div>
-  </div>`;
+function fmtDist(m){
+  return m<1000 ? `${Math.round(m)} m` : `${(m/1000).toFixed(1)} km`;
 }
 
-function puBoundary(p){
-  const name=p.name||'Geumjeong-gu';
-  return `<div>
-    <div class="pu-head" style="background:#E8F5EE;border-color:#2E8B57;">
-      <div class="pu-badge" style="background:#2E8B5720;color:#2E8B57;">🗺 Batas Wilayah</div>
-      <div class="pu-name">${name}</div>
-    </div>
-    <div class="pu-body">
-      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-val">Kecamatan (Gu)</span></div>
-      <div class="pu-row"><span class="pu-key">Kota</span><span class="pu-val">Busan, Korea Selatan</span></div>
-      ${p.admin_level?`<div class="pu-row"><span class="pu-key">Level</span><span class="pu-val">Admin Level ${p.admin_level}</span></div>`:''}
-    </div>
-  </div>`;
-}
-
-// ===== LAYER STORE =====
-const LY={};
-const VIS={edu:true,train:true,bus:true,rail:true,buf:true,bnd:true};
-const SEARCH=[];
+// ===========================
+// DATA STORAGE for distance calc
+// ===========================
+const TRAIN_POINTS = []; // {name, nameKr, lat, lng}
+const BUS_POINTS   = []; // {name, nameKr, lat, lng}
+const SEARCH = [];
+const LY = {};
+const VIS = {edu:true,train:true,bus:true,rail:true,buf:true,bnd:true};
 
 function toggleLayer(k){
   const t=document.getElementById('tog-'+k);
@@ -505,115 +380,180 @@ function toggleLayer(k){
   VIS[k]=!VIS[k];
 }
 
-// ===== REAL GEUMJEONG BOUNDARY (simplified polygon) =====
-// Approximate real shape of Geumjeong-gu from OSM
-const GEUMJEONG_POLY = [
-  [35.3002,129.0412],[35.2998,129.0498],[35.2965,129.0521],
-  [35.2944,129.0587],[35.2912,129.0634],[35.2889,129.0698],
-  [35.2845,129.0734],[35.2812,129.0801],[35.2798,129.0867],
-  [35.2756,129.0923],[35.2712,129.0978],[35.2689,129.1034],
-  [35.2645,129.1067],[35.2601,129.1123],[35.2556,129.1145],
-  [35.2512,129.1134],[35.2478,129.1089],[35.2434,129.1056],
-  [35.2401,129.1012],[35.2367,129.0967],[35.2334,129.0934],
-  [35.2289,129.0912],[35.2245,129.0878],[35.2212,129.0823],
-  [35.2178,129.0778],[35.2145,129.0712],[35.2112,129.0667],
-  [35.2089,129.0601],[35.2067,129.0534],[35.2056,129.0467],
-  [35.2067,129.0401],[35.2089,129.0345],[35.2123,129.0289],
-  [35.2156,129.0234],[35.2189,129.0178],[35.2234,129.0134],
-  [35.2278,129.0101],[35.2334,129.0078],[35.2389,129.0067],
-  [35.2445,129.0078],[35.2501,129.0101],[35.2545,129.0134],
-  [35.2589,129.0167],[35.2634,129.0201],[35.2678,129.0245],
-  [35.2712,129.0289],[35.2745,129.0334],[35.2778,129.0378],
-  [35.2812,129.0312],[35.2856,129.0267],[35.2901,129.0234],
-  [35.2945,129.0289],[35.2978,129.0345],[35.3002,129.0412]
-];
+// ===========================
+// DISTANCE DASHBOARD HTML
+// ===========================
+function buildDistDash(lat, lng){
+  // nearest 3 train stations
+  const trains = TRAIN_POINTS
+    .map(p=>({...p, dist:haversine(lat,lng,p.lat,p.lng)}))
+    .sort((a,b)=>a.dist-b.dist).slice(0,3);
 
-const BOUNDS=[[35.195,129.005],[35.310,129.120]];
-function zoomTo(){map.fitBounds(BOUNDS);}
+  // nearest 3 bus stops
+  const buses = BUS_POINTS
+    .map(p=>({...p, dist:haversine(lat,lng,p.lat,p.lng)}))
+    .sort((a,b)=>a.dist-b.dist).slice(0,3);
 
-// ===== DATA SAMPLE =====
-const DATA={
-  education:{type:'FeatureCollection',features:[
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0831,35.1980]},properties:{name:'금사초등학교',isced_leve:1,amenity:'school'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0842,35.2010]},properties:{name:'금사중학교',isced_leve:2,amenity:'school'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0856,35.2025]},properties:{name:'예원여자고등학교',isced_leve:3,amenity:'school'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0865,35.2030]},properties:{name:'금정전자공업고등학교',isced_leve:3,amenity:'school'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0840,35.2018]},properties:{name:'예원여자중학교',isced_leve:2,amenity:'school'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0820,35.1995]},properties:{name:'금사나너울지역아동센터',isced_leve:null,amenity:'school'}}
-  ]},
-  train:{type:'FeatureCollection',features:[
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0892,35.2310]},properties:{name:'서동역 (Seodong)',railway:'subway_station'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0875,35.2180]},properties:{name:'금사역 (Geumsa)',railway:'subway_station'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0860,35.2060]},properties:{name:'부산대앞역',railway:'subway_station'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0845,35.1950]},properties:{name:'장전역 (Jangjeon)',railway:'subway_station'}}
-  ]},
-  bus:{type:'FeatureCollection',features:[
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0800,35.2100]},properties:{name:'금정구청 정류장',amenity:'bus_stop'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0825,35.2055]},properties:{name:'금사동 정류장',amenity:'bus_stop'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0870,35.2200]},properties:{name:'선두구동 정류장',amenity:'bus_stop'}},
-    {type:'Feature',geometry:{type:'Point',coordinates:[129.0810,35.2150]},properties:{name:'회동동 정류장',amenity:'bus_stop'}}
-  ]},
-  railway:{type:'FeatureCollection',features:[
-    {type:'Feature',geometry:{type:'LineString',coordinates:[[129.0892,35.2310],[129.0875,35.2180],[129.0860,35.2060],[129.0845,35.1950],[129.0830,35.1820]]},properties:{name:'부산 도시철도 1호선'}}
-  ]}
-};
+  const trainRows = trains.map(p=>{
+    const dl=distLabel(p.dist);
+    return `<div class="dist-card">
+      <div class="dist-icon">🚂</div>
+      <div class="dist-info">
+        <div class="dist-name">${p.name}</div>
+        <div class="dist-name-kr">${p.nameKr||''}</div>
+        <div class="dist-meta">
+          <span class="dist-km" style="color:#0C447C;">${fmtDist(p.dist)}</span>
+          <span class="dist-badge ${dl.cls}">${dl.txt}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
-// ===== RENDER =====
+  const busRows = buses.map(p=>{
+    const dl=distLabel(p.dist);
+    return `<div class="dist-card">
+      <div class="dist-icon">🚌</div>
+      <div class="dist-info">
+        <div class="dist-name">${p.name}</div>
+        <div class="dist-name-kr">${p.nameKr||''}</div>
+        <div class="dist-meta">
+          <span class="dist-km" style="color:#D4720A;">${fmtDist(p.dist)}</span>
+          <span class="dist-badge ${dl.cls}">${dl.txt}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<div class="dist-section">
+    <div class="dist-title">
+      <span>📍</span> Akses Transportasi Terdekat · 교통 접근성
+    </div>
+    <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;margin-bottom:5px;letter-spacing:.04em;">Stasiun KA · 기차역</div>
+    ${trainRows||'<div style="font-size:11px;color:#94A3B8;padding:4px 0;">Data belum tersedia</div>'}
+    <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;margin:8px 0 5px;letter-spacing:.04em;">Halte Bus · 버스 정류장</div>
+    ${busRows||'<div style="font-size:11px;color:#94A3B8;padding:4px 0;">Data belum tersedia</div>'}
+  </div>`;
+}
+
+// ===========================
+// POPUP BUILDERS
+// ===========================
+function puSchool(p, lat, lng){
+  const lv=p.isced_leve;
+  const cfg={
+    1:['SD','초등학교','#2E8B57','#E8F5EE'],
+    2:['SMP','중학교','#1A6BB5','#EBF4FF'],
+    3:['SMA/SMK','고등학교','#C0392B','#FDECEA']
+  }[lv]||['Sekolah','학교','#64748B','#F1F5F9'];
+  const name = p.name||'이름 없음';
+  const dash = buildDistDash(lat, lng);
+  return `<div>
+    <div class="pu-head" style="background:${cfg[3]};border-color:${cfg[2]};">
+      <div class="pu-badge" style="background:${cfg[2]}22;color:${cfg[2]};">📍 ${cfg[0]} · ${cfg[1]}</div>
+      <div class="pu-name">${name}</div>
+    </div>
+    <div class="pu-body">
+      <div class="pu-row"><span class="pu-key">Tingkat</span><span class="pu-tag" style="background:${cfg[3]};color:${cfg[2]};">${cfg[0]} · ${cfg[1]}</span></div>
+      ${p.amenity?`<div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-val">${p.amenity}</span></div>`:''}
+      ${p.capacity?`<div class="pu-row"><span class="pu-key">Kapasitas</span><span class="pu-val">${p.capacity} siswa</span></div>`:''}
+      <div class="pu-row"><span class="pu-key">Wilayah</span><span class="pu-val">금정구, 부산 · Geumjeong-gu, Busan</span></div>
+    </div>
+    ${dash}
+  </div>`;
+}
+
+function puTrain(p){
+  const name=p.name||'기차역';
+  const kr=p.name_kr||'';
+  return `<div>
+    <div class="pu-head" style="background:#EBF4FF;border-color:#0C447C;">
+      <div class="pu-badge" style="background:#0C447C22;color:#0C447C;">🚂 Stasiun KA · 기차역</div>
+      <div class="pu-name">${name}</div>
+      ${kr?`<div class="pu-name-sub">${kr}</div>`:''}
+    </div>
+    <div class="pu-body">
+      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-tag" style="background:#EBF4FF;color:#0C447C;">Stasiun KA · 기차역</span></div>
+      ${p.railway?`<div class="pu-row"><span class="pu-key">Jalur</span><span class="pu-val">${p.railway}</span></div>`:''}
+      ${p.operator?`<div class="pu-row"><span class="pu-key">Operator</span><span class="pu-val">${p.operator}</span></div>`:''}
+      <div class="pu-row"><span class="pu-key">Wilayah</span><span class="pu-val">금정구, 부산</span></div>
+    </div>
+  </div>`;
+}
+
+function puBus(p){
+  const name=p.name||'버스 정류장';
+  const kr=p.name_kr||'';
+  return `<div>
+    <div class="pu-head" style="background:#FEF3E2;border-color:#D4720A;">
+      <div class="pu-badge" style="background:#D4720A22;color:#D4720A;">🚌 Halte Bus · 버스</div>
+      <div class="pu-name">${name}</div>
+      ${kr?`<div class="pu-name-sub">${kr}</div>`:''}
+    </div>
+    <div class="pu-body">
+      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-tag" style="background:#FEF3E2;color:#D4720A;">Halte Bus · 버스 정류장</span></div>
+      ${p.ref?`<div class="pu-row"><span class="pu-key">No.</span><span class="pu-val">${p.ref}</span></div>`:''}
+      <div class="pu-row"><span class="pu-key">Wilayah</span><span class="pu-val">금정구, 부산</span></div>
+    </div>
+  </div>`;
+}
+
+// ===========================
+// RENDER FUNCTIONS
+// ===========================
 function renderBoundary(){
   const poly=L.polygon(GEUMJEONG_POLY,{
-    color:'#2E8B57',weight:2.5,
-    fillColor:'#2E8B57',fillOpacity:.07,
-    dashArray:null
+    color:'#2E8B57',weight:2.5,fillColor:'#2E8B57',fillOpacity:.07
   });
   poly.bindPopup(`<div>
     <div class="pu-head" style="background:#E8F5EE;border-color:#2E8B57;">
-      <div class="pu-badge" style="background:#2E8B5720;color:#2E8B57;">🗺 Batas Wilayah</div>
+      <div class="pu-badge" style="background:#2E8B5722;color:#2E8B57;">🗺 Batas Wilayah · 경계</div>
       <div class="pu-name">금정구 (Geumjeong-gu)</div>
     </div>
     <div class="pu-body">
-      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-val">Kecamatan (Gu)</span></div>
-      <div class="pu-row"><span class="pu-key">Kota</span><span class="pu-val">Busan, Korea Selatan</span></div>
+      <div class="pu-row"><span class="pu-key">Tipe</span><span class="pu-val">Kecamatan · 구 (Gu)</span></div>
+      <div class="pu-row"><span class="pu-key">Kota</span><span class="pu-val">부산광역시 · Busan, Korea Selatan</span></div>
     </div>
-  </div>`,{maxWidth:260});
-  LY.bnd=poly;
-  poly.addTo(map);
+  </div>`,{maxWidth:270});
+  LY.bnd=poly; poly.addTo(map);
 }
 
 function renderBuffer(trainGJ){
   const grp=L.layerGroup();
   trainGJ.features.forEach(f=>{
     const [lng,lat]=f.geometry.coordinates;
-    L.circle([lat,lng],{
-      radius:500,color:'#1A6BB5',weight:1.5,
-      fillColor:'#1A6BB5',fillOpacity:.10,dashArray:'5,4'
-    }).addTo(grp);
+    // hanya render buffer jika titik berada di dalam atau dekat batas wilayah
+    const pt=L.latLng(lat,lng);
+    if(BOUNDS.pad(0.02).contains(pt)){
+      L.circle([lat,lng],{
+        radius:500,color:'#1A6BB5',weight:1.2,
+        fillColor:'#1A6BB5',fillOpacity:.10,dashArray:'5,4'
+      }).addTo(grp);
+    }
   });
-  LY.buf=grp;
-  grp.addTo(map);
+  LY.buf=grp; grp.addTo(map);
 }
 
 function renderRailway(gj){
-  const lyr=L.geoJSON(gj,{
-    style:{color:'#1A6BB5',weight:3,opacity:.8}
-  });
-  LY.rail=lyr;
-  lyr.addTo(map);
+  const lyr=L.geoJSON(gj,{style:{color:'#1A6BB5',weight:3,opacity:.8}});
+  LY.rail=lyr; lyr.addTo(map);
 }
 
 function renderBus(gj){
   let n=0;
   const lyr=L.geoJSON(gj,{
     pointToLayer:(f,ll)=>{
-      SEARCH.push({name:f.properties.name||'Halte Bus',ll,cat:'Halte Bus',color:'#D4720A'});
+      const name=f.properties.name||'Halte Bus';
+      const nameKr=f.properties.name_kr||name;
+      BUS_POINTS.push({name,nameKr,lat:ll.lat,lng:ll.lng});
+      SEARCH.push({name,nameKr,ll,cat:'Halte Bus · 버스',color:'#D4720A'});
       n++;
-      return L.marker(ll,{icon:busIcon});
+      return L.marker(ll,{icon:BUS_ICON});
     },
     onEachFeature:(f,l)=>{
-      l.bindPopup(puBus(f.properties),{maxWidth:270,autoPan:true,keepInView:true});
+      l.bindPopup(puBus(f.properties),{maxWidth:280,autoPan:true,keepInView:true});
     }
   });
-  LY.bus=lyr;
-  lyr.addTo(map);
+  LY.bus=lyr; lyr.addTo(map);
   document.getElementById('cnt-bus').textContent=n;
 }
 
@@ -621,16 +561,18 @@ function renderTrain(gj){
   let n=0;
   const lyr=L.geoJSON(gj,{
     pointToLayer:(f,ll)=>{
-      SEARCH.push({name:f.properties.name||'Stasiun KA',ll,cat:'Stasiun KA',color:'#0C447C'});
+      const name=f.properties.name||'Stasiun KA';
+      const nameKr=f.properties.name_kr||name;
+      TRAIN_POINTS.push({name,nameKr,lat:ll.lat,lng:ll.lng});
+      SEARCH.push({name,nameKr,ll,cat:'Stasiun KA · 기차역',color:'#0C447C'});
       n++;
-      return L.marker(ll,{icon:trainIcon});
+      return L.marker(ll,{icon:TRAIN_ICON});
     },
     onEachFeature:(f,l)=>{
-      l.bindPopup(puTrain(f.properties),{maxWidth:270,autoPan:true,keepInView:true});
+      l.bindPopup(puTrain(f.properties),{maxWidth:280,autoPan:true,keepInView:true});
     }
   });
-  LY.train=lyr;
-  lyr.addTo(map);
+  LY.train=lyr; lyr.addTo(map);
   document.getElementById('cnt-train').textContent=n;
 }
 
@@ -639,72 +581,106 @@ function renderEducation(gj){
   const lyr=L.geoJSON(gj,{
     pointToLayer:(f,ll)=>{
       const lv=f.properties.isced_leve;
-      if(lv==1)sd++;else if(lv==2)smp++;else if(lv==3)sma++;
+      if(lv==1)sd++; else if(lv==2)smp++; else if(lv==3)sma++;
+      const name=f.properties.name||'학교';
       SEARCH.push({
-        name:f.properties.name||'Sekolah',ll,
-        cat:lv==1?'SD':lv==2?'SMP':lv==3?'SMA/SMK':'Sekolah',
+        name,nameKr:name,ll,
+        cat:lv==1?'SD · 초등학교':lv==2?'SMP · 중학교':lv==3?'SMA/SMK · 고등학교':'Sekolah · 학교',
         color:lv==1?'#2E8B57':lv==2?'#1A6BB5':lv==3?'#C0392B':'#64748B'
       });
       return L.marker(ll,{icon:schoolIcon(lv)});
     },
     onEachFeature:(f,l)=>{
-      l.bindPopup(puSchool(f.properties),{maxWidth:270,autoPan:true,keepInView:true});
+      const ll=l.getLatLng ? l.getLatLng() : l.getBounds().getCenter();
+      l.bindPopup(()=>puSchool(f.properties,ll.lat,ll.lng),
+        {maxWidth:300,autoPan:true,keepInView:true});
     }
   });
-  LY.edu=lyr;
-  lyr.addTo(map);
+  LY.edu=lyr; lyr.addTo(map);
   document.getElementById('cnt-sd').textContent=sd;
   document.getElementById('cnt-smp').textContent=smp;
   document.getElementById('cnt-sma').textContent=sma;
 }
 
-// ===== SEARCH =====
+// ===========================
+// SEARCH
+// ===========================
 const sinp=document.getElementById('search-inp');
 const sres=document.getElementById('search-res');
-
 sinp.addEventListener('input',()=>{
   const q=sinp.value.trim().toLowerCase();
   sres.innerHTML='';
   if(!q){sres.style.display='none';return;}
-  const hits=SEARCH.filter(d=>d.name.toLowerCase().includes(q)).slice(0,8);
+  const hits=SEARCH.filter(d=>
+    d.name.toLowerCase().includes(q)||(d.nameKr||'').toLowerCase().includes(q)
+  ).slice(0,8);
   if(!hits.length){sres.style.display='none';return;}
   hits.forEach(d=>{
     const el=document.createElement('div');
     el.className='s-item';
     el.innerHTML=`
-      <div style="width:10px;height:10px;border-radius:50%;background:${d.color};flex-shrink:0;"></div>
+      <div style="width:9px;height:9px;border-radius:50%;background:${d.color};flex-shrink:0;"></div>
       <div>
         <div class="s-item-name">${d.name}</div>
-        <div class="s-item-cat">${d.cat}</div>
+        <div class="s-item-sub">${d.cat}</div>
       </div>`;
-    el.onclick=()=>{
-      map.setView(d.ll,16);
-      sres.style.display='none';
-      sinp.value=d.name;
-    };
+    el.onclick=()=>{map.setView(d.ll,16);sres.style.display='none';sinp.value=d.name;};
     sres.appendChild(el);
   });
   sres.style.display='block';
 });
-
 document.addEventListener('click',e=>{
   if(!document.getElementById('search-wrap').contains(e.target))
     sres.style.display='none';
 });
 
-// ===== FETCH OR FALLBACK =====
+// ===========================
+// DATA SAMPLE (fallback)
+// ===========================
+const DATA={
+  education:{type:'FeatureCollection',features:[
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0831,35.1980]},properties:{name:'금사초등학교 (Geumsa Elementary)',isced_leve:1,amenity:'school'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0842,35.2010]},properties:{name:'금사중학교 (Geumsa Middle)',isced_leve:2,amenity:'school'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0856,35.2025]},properties:{name:'예원여자고등학교 (Yewon Girls High)',isced_leve:3,amenity:'school'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0865,35.2030]},properties:{name:'금정전자공업고등학교 (Geumjeong Tech High)',isced_leve:3,amenity:'school'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0840,35.2018]},properties:{name:'예원여자중학교 (Yewon Girls Middle)',isced_leve:2,amenity:'school'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0820,35.1995]},properties:{name:'금사나너울지역아동센터 (Geumsa Children Center)',isced_leve:null,amenity:'school'}}
+  ]},
+  train:{type:'FeatureCollection',features:[
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0892,35.2310]},properties:{name:'서동역 Seodong Station',name_kr:'서동역',railway:'subway_station'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0875,35.2180]},properties:{name:'금사역 Geumsa Station',name_kr:'금사역',railway:'subway_station'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0860,35.2060]},properties:{name:'부산대앞역 Busan Univ. Station',name_kr:'부산대앞역',railway:'subway_station'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0845,35.1950]},properties:{name:'장전역 Jangjeon Station',name_kr:'장전역',railway:'subway_station'}}
+  ]},
+  bus:{type:'FeatureCollection',features:[
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0800,35.2100]},properties:{name:'금정구청 정류장 Geumjeong Office Stop',name_kr:'금정구청 정류장',amenity:'bus_stop'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0825,35.2055]},properties:{name:'금사동 정류장 Geumsa-dong Stop',name_kr:'금사동 정류장',amenity:'bus_stop'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0870,35.2200]},properties:{name:'선두구동 정류장 Seondugu Stop',name_kr:'선두구동 정류장',amenity:'bus_stop'}},
+    {type:'Feature',geometry:{type:'Point',coordinates:[129.0810,35.2150]},properties:{name:'회동동 정류장 Hoedong Stop',name_kr:'회동동 정류장',amenity:'bus_stop'}}
+  ]},
+  railway:{type:'FeatureCollection',features:[
+    {type:'Feature',geometry:{type:'LineString',coordinates:[[129.0892,35.2310],[129.0875,35.2180],[129.0860,35.2060],[129.0845,35.1950],[129.0830,35.1820]]},properties:{name:'부산 도시철도 1호선 Line 1'}}
+  ]}
+};
+
+// ===========================
+// FETCH OR FALLBACK
+// ===========================
 async function tryFetch(url,fallback){
   try{
     const r=await fetch(url);
     if(!r.ok)throw new Error();
     return await r.json();
   }catch{
-    console.warn('Using sample data for:',url);
+    console.warn('Sample data used:',url);
     return fallback;
   }
 }
 
 async function init(){
+  // Render boundary dulu agar BOUNDS tersedia
+  renderBoundary();
+
   const [edu,train,bus,rail]=await Promise.all([
     tryFetch('./data/education_geumjeong.geojson',DATA.education),
     tryFetch('./data/train_station_geumjeong.geojson',DATA.train),
@@ -712,14 +688,16 @@ async function init(){
     tryFetch('./data/railway_geumjeong.geojson',DATA.railway),
   ]);
 
-  renderBoundary();
-  renderBuffer(train);
+  // Render transport dulu agar TRAIN_POINTS & BUS_POINTS terisi
+  // sebelum distance dashboard sekolah dihitung
   renderRailway(rail);
   renderBus(bus);
   renderTrain(train);
+  renderBuffer(train);
+  // Render sekolah terakhir agar distance dash bisa hitung jarak
   renderEducation(edu);
 
-  map.fitBounds(BOUNDS);
+  map.fitBounds(BOUNDS, {padding:[20,20]});
 
   const ld=document.getElementById('loading');
   ld.classList.add('hidden');
